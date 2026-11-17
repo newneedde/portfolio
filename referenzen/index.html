@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Geschützter Bereich – Marc Schappach</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/site.css">
+
+  <!-- Gespeicherte Theme-Wahl vor dem ersten Rendern setzen (kein Flackern) -->
+  <script>
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+
+  <div class="page page--gate">
+    <div class="topbar">
+      <button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button>
+    </div>
+
+    <main id="inhalt" class="grid">
+      <section class="tile tile--surface gate" id="gate" aria-labelledby="gate-titel">
+        <p class="label">Geschützter Bereich</p>
+        <h1 class="heading" id="gate-titel">Referenzen</h1>
+        <p class="body gate__copy">Den Zugangscode finden Sie im Anschreiben – oder ich sende ihn gern auf Anfrage.</p>
+
+        <form id="gate-form" novalidate>
+          <div class="field">
+            <label class="field__label" for="code">Zugangscode</label>
+            <input class="field__input" id="code" name="code" type="text"
+                   autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"
+                   aria-describedby="code-hint code-error">
+            <p class="field__hint" id="code-hint">Steht im Anschreiben unter dem Betreff.</p>
+            <p class="field__error" id="code-error" role="alert" hidden>
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+                <circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10 5.5v5.5M10 13.5v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <span id="code-error-text"></span>
+            </p>
+          </div>
+          <button class="button" id="gate-submit" type="submit" aria-disabled="false">Bereich öffnen →</button>
+        </form>
+        <p class="label" id="gate-status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+  </div>
+
+  <nav class="nav" aria-label="Hauptnavigation">
+    <a href="../">Start</a>
+    <a class="nav__desktop" href="../#ueber-mich">Über mich</a>
+    <a href="../#referenzen" aria-current="page">Referenzen</a>
+    <a class="nav__desktop" href="../#lebenslauf">Lebenslauf</a>
+    <a href="../#kontakt">Kontakt</a>
+  </nav>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/gate.js"></script>
+</body>
+</html>

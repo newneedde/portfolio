@@ -1,0 +1,359 @@
+/* ==========================================================================
+   Seitenstile – Mobile first (390 px), ab 900 px Bento-Raster aus Web Desktop
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+p,
+h1,
+h2,
+ul,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ---------- Fokus (WCAG 2.4.7 / 2.4.11): 3 px Außenrand ---------- */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 20;
+  padding: 14px 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-inverse);
+  color: var(--color-text-on-inverse);
+  font-size: 15px;
+  line-height: 20px;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
+/* ---------- Seite & Raster ---------- */
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--page-pad) 120px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 0;
+}
+
+.theme-toggle {
+  min-height: 48px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.theme-toggle:hover {
+  box-shadow: inset 0 0 0 2px var(--color-text-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--layout-gap);
+}
+
+.c-full { grid-column: 1 / -1; }
+.c-main { grid-column: 1 / -1; }
+.c-side { grid-column: 1 / -1; }
+.c-third { grid-column: 1 / -1; }
+.c-half { grid-column: span 1; }
+
+@media (min-width: 900px) {
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .c-main { grid-column: span 2; }
+  .c-side,
+  .c-third,
+  .c-half { grid-column: span 1; }
+  .topbar { padding: 0 0 16px; }
+}
+
+/* ---------- Bento-Kachel (Web/Bento-Kachel) ---------- */
+.tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: var(--space-tile);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+  min-width: 0;
+}
+
+.tile--surface { background: var(--color-bg-surface); }
+.tile--accent { background: var(--color-bg-accent); }
+.tile--warm { background: var(--color-bg-warm); }
+.tile--strong { background: var(--color-bg-strong); color: var(--color-text-on-strong); }
+.tile--kobalt { background: var(--color-bg-kobalt); color: var(--color-text-on-kobalt); }
+
+.tile--tall { min-height: 240px; }
+.tile--metric { min-height: 190px; }
+.tile--rows { gap: 16px; }
+
+@media (min-width: 900px) {
+  .tile--tall { min-height: 360px; }
+  .tile--metric { min-height: 220px; }
+  .tile--text { min-height: 240px; }
+  .tile--wide { min-height: 360px; }
+  .tile--short { min-height: 200px; }
+}
+
+.label {
+  font-weight: 400;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.tile--strong .label { color: var(--color-text-on-strong); }
+.tile--kobalt .label { color: var(--color-text-on-kobalt); }
+
+.display {
+  font-size: var(--type-display-size);
+  line-height: var(--type-display-line);
+  letter-spacing: var(--type-display-track);
+  font-weight: 400;
+  overflow-wrap: break-word;
+}
+
+.lead {
+  font-size: var(--type-lead-size);
+  line-height: var(--type-lead-line);
+  letter-spacing: var(--type-lead-track);
+}
+
+.body {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+}
+
+.metric {
+  font-size: var(--type-metric-size);
+  line-height: var(--type-metric-line);
+  letter-spacing: var(--type-metric-track);
+  font-weight: 300;
+}
+
+.tile__metric-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tile--metric .body { color: var(--color-text-secondary); }
+.tile--strong.tile--metric .body { color: var(--color-text-on-strong); }
+
+.list li::before {
+  content: "– ";
+}
+
+/* ---------- Kachel als Link: ganze Fläche klickbar ---------- */
+a.tile {
+  color: inherit;
+  text-decoration: none;
+}
+a.tile:hover {
+  box-shadow: inset 0 0 0 2px var(--color-text-primary); /* Hover: Form, nicht nur Farbe */
+}
+a.tile:active {
+  box-shadow: inset 0 0 0 3px var(--color-text-primary), inset 0 3px 8px rgb(0 0 0 / 0.18);
+}
+.arrow {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-left: 0.15em;
+  vertical-align: -0.08em;
+}
+
+/* ---------- Bilder ---------- */
+.figure {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.shot {
+  overflow: hidden;
+  border-radius: var(--radius-lg); /* Exporte haben Rundung eingebrannt; CSS-Radius schneidet identisch nach */
+}
+.shot img {
+  width: 100%;
+  height: auto;
+}
+
+.code-tile {
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-code);
+}
+.code-tile .shot {
+  border-radius: 0;
+}
+
+@media (min-width: 900px) {
+  .figure { gap: 22px; }
+}
+
+/* ---------- Navigation (Web/Navigation, schwebende Pille) ---------- */
+.nav {
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  z-index: 10;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  transform: translateX(-50%);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface);
+  box-shadow: var(--shadow-nav);
+}
+.nav a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  font-size: 15px;
+  line-height: 20px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav a:hover {
+  box-shadow: inset 0 0 0 2px var(--color-text-primary);
+}
+.nav a[aria-current="page"] {
+  background: var(--color-bg-inverse);
+  color: var(--color-text-on-inverse);
+}
+/* Mobile: „Über mich“ und „Lebenslauf“ ausblenden */
+.nav .nav__desktop { display: none; }
+@media (min-width: 600px) {
+  .nav .nav__desktop { display: flex; }
+}
+
+/* ---------- Bewegung reduzieren ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+
+/* ---------- Zugangsmaske (Mobile · Geschützter Bereich – Zugang) ---------- */
+.page--gate .grid { display: block; max-width: 560px; margin: 0 auto; padding-top: 56px; }
+@media (min-width: 900px) { .page--gate .grid { padding-top: 120px; } }
+
+.gate { gap: 20px; padding: 28px var(--space-tile); justify-content: flex-start; }
+.heading {
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line);
+  letter-spacing: var(--type-heading-track);
+  font-weight: 400;
+}
+.gate__copy { color: var(--color-text-secondary); }
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field__label { font-weight: 600; font-size: 16px; line-height: 22px; }
+.field__input {
+  width: 100%;
+  min-height: 52px;
+  padding: 15px 20px;
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 18px;
+  line-height: 22px;
+}
+.field__input:hover { border-color: var(--color-text-primary); }
+.field__input[aria-invalid="true"] { border-color: var(--color-error); box-shadow: inset 0 0 0 1px var(--color-error); }
+.field__hint { font-size: 14px; line-height: 20px; color: var(--color-text-secondary); }
+.field__error {
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 14px; line-height: 20px; font-weight: 600; color: var(--color-error);
+}
+.field__error[hidden] { display: none; }
+.field__error svg { flex: none; width: 20px; height: 20px; }
+
+.button {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 48px; padding: 14px 24px;
+  border: 0; border-radius: var(--radius-full);
+  background: var(--color-bg-inverse); color: var(--color-text-on-inverse);
+  font: inherit; font-weight: 600; font-size: 16px; line-height: 20px; cursor: pointer;
+}
+.button:hover { background: var(--color-bg-inverse-hover); box-shadow: inset 0 0 0 2px var(--color-text-primary); }
+.button[aria-disabled="true"] { opacity: 0.6; cursor: progress; }
+.gate form { display: flex; flex-direction: column; gap: 20px; }
+
+/* ---------- Referenz-Seiten: Handy-Bild-Kachel, Stapel, Textspalte ---------- */
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.body--secondary { color: var(--color-text-secondary); }
+.c-text2 { grid-column: 1 / -1; }
+
+.phone { align-items: center; justify-content: flex-start; gap: 12px; }
+.phone__img {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+.phone .label { align-self: stretch; }
+
+.arrow--back { margin-left: 0; margin-right: 0.15em; }
+
+@media (min-width: 900px) {
+  .phone { grid-row: span 3; justify-content: flex-start; gap: 22px; }
+  .phone__img { max-width: none; }
+  .c-text2 { grid-column: 2 / span 2; }
+}
