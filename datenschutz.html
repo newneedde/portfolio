@@ -1,16 +1,29 @@
 <!DOCTYPE html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
-<title>Datenschutz · Marc Schappach</title>
-<style>
-@font-face{font-family:"Inter";src:url("fonts/inter-var.woff2") format("woff2");font-weight:100 900;font-display:swap}
-:root{--paper:#f6f5f1;--ink:#111318;--muted:#4d5160;--line:#dcdbd3;--accent:#ff6a3d}
-@media (prefers-color-scheme:dark){:root{--paper:#111318;--ink:#f3f2ee;--muted:#a7aab6;--line:#2c303b;--accent:#ff7a50}}
-body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.6 "Inter",system-ui,sans-serif}
-main{width:min(100% - 64px,720px);margin:80px auto 120px} a{color:inherit} :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-h1{font-weight:400;font-size:44px;letter-spacing:-.02em;margin:32px 0} h2{font-weight:600;font-size:20px;margin:40px 0 8px} p{margin:0 0 12px} .muted{color:var(--muted)}
-.back{font-size:16px;text-decoration:none;border-bottom:1px solid var(--line)}
-</style></head><body><main><a class="back" href="./">← Zur Startseite</a><h1>Datenschutz</h1>
-<p class="muted">Vorlage – bitte vor Veröffentlichung prüfen und ergänzen.</p>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Datenschutz · Marc Schappach</title>
+  <meta name="description" content="Datenschutz">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+  <link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="css/start.css">
+  <script>
+    try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar"><button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button></div>
+    <main class="legal" id="inhalt">
+      <a href="./">← Zur Startseite</a>
+      <h1>Datenschutz</h1>
+<p class="body--secondary">Vorlage – bitte vor Veröffentlichung prüfen und ergänzen.</p>
 <h2>Verantwortlicher</h2>
 <p>Marc Schappach, [Anschrift], [E-Mail-Adresse]</p>
 <h2>Hosting</h2>
@@ -21,4 +34,16 @@ h1{font-weight:400;font-size:44px;letter-spacing:-.02em;margin:32px 0} h2{font-w
 <p>Wenn Sie mir eine E-Mail schreiben, verarbeite ich Ihre Angaben ausschließlich zur Bearbeitung Ihrer Anfrage (Art. 6 Abs. 1 lit. b bzw. f DSGVO).</p>
 <h2>Ihre Rechte</h2>
 <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Widerspruch und Datenübertragbarkeit sowie das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, etwa beim Bayerischen Landesamt für Datenschutzaufsicht.</p>
-</main></body></html>
+
+    </main>
+  </div>
+  <nav class="nav" aria-label="Hauptnavigation">
+    <a href="./">Start</a>
+    <a class="nav__desktop" href="./#arbeitsweise">Arbeitsweise</a>
+    <a class="nav__desktop" href="./#ansatz">Ansatz</a>
+    <a href="referenzen/">Referenzen</a>
+    <a href="./#kontakt">Kontakt</a>
+  </nav>
+  <script src="js/theme.js"></script>
+</body>
+</html>
