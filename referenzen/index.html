@@ -8,7 +8,8 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
-
+  <link rel="alternate" hreflang="de" href="./">
+  <link rel="alternate" hreflang="en" href="../en/references/">
   <link rel="stylesheet" href="../css/tokens.css">
   <link rel="stylesheet" href="../css/site.css">
 
@@ -25,6 +26,7 @@
 
   <div class="page page--gate">
     <div class="topbar">
+      <a class="theme-toggle" id="lang-toggle" href="../en/references/" hreflang="en" aria-label="Sprache: DE – Switch to English">Sprache: DE</a>
       <button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button>
     </div>
 
@@ -34,7 +36,7 @@
         <h1 class="heading" id="gate-titel">Referenzen</h1>
         <p class="body gate__copy">Den Zugangscode finden Sie im Anschreiben – oder ich sende ihn gern auf Anfrage.</p>
 
-        <form id="gate-form" novalidate>
+        <form id="gate-form" data-src="inhalt.enc" novalidate>
           <div class="field">
             <label class="field__label" for="code">Zugangscode</label>
             <input class="field__input" id="code" name="code" type="text"
@@ -65,6 +67,7 @@
   </nav>
 
   <script src="../js/theme.js"></script>
+  <script src="../js/site.js"></script>
   <script src="../js/gate.js"></script>
 </body>
 </html>

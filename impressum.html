@@ -9,6 +9,8 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+  <link rel="alternate" hreflang="de" href="impressum.html">
+  <link rel="alternate" hreflang="en" href="en/imprint.html">
   <link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/site.css">
@@ -18,18 +20,21 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
   <div class="page">
-    <div class="topbar"><button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button></div>
+    <div class="topbar">
+      <a class="theme-toggle" id="lang-toggle" href="en/imprint.html" hreflang="en" aria-label="Sprache: DE – Switch to English">Sprache: DE</a>
+      <button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button>
+    </div>
     <main class="legal" id="inhalt">
       <a href="./">← Zur Startseite</a>
       <h1>Impressum</h1>
-<h2>Angaben gemäß § 5 DDG</h2>
-<p>Marc Schappach<br>[Straße Hausnummer]<br>[PLZ] München</p>
-<h2>Kontakt</h2>
-<p>E-Mail: [E-Mail-Adresse]<br>Telefon: [optional]</p>
-<h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
-<p>Marc Schappach, Anschrift wie oben</p>
-
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>Marc Schappach<br>München</p>
+      <h2>Kontakt</h2>
+      <p>E-Mail: <span class="js-mail" data-u="marc" data-d="newneed.de">marc [at] newneed [punkt] de</span></p>
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <p>Marc Schappach</p>
     </main>
   </div>
   <nav class="nav" aria-label="Hauptnavigation">
@@ -40,5 +45,6 @@
     <a href="./#kontakt">Kontakt</a>
   </nav>
   <script src="js/theme.js"></script>
+  <script src="js/site.js"></script>
 </body>
 </html>

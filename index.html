@@ -9,6 +9,8 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+  <link rel="alternate" hreflang="de" href="./">
+  <link rel="alternate" hreflang="en" href="en/">
   <link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/site.css">
@@ -20,7 +22,10 @@
 <body>
   <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
   <div class="page page--start">
-    <div class="topbar"><button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button></div>
+    <div class="topbar">
+      <a class="theme-toggle" id="lang-toggle" href="en/" hreflang="en" aria-label="Sprache: DE – Switch to English">Sprache: DE</a>
+      <button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button>
+    </div>
 
     <main id="inhalt">
       <section class="hero" aria-labelledby="titel">
@@ -42,27 +47,27 @@
           <h2 class="section__title" id="arbeitsweise-titel">Vom Entwurf zum lauffähigen Prototyp – in einem Zug.</h2>
         </div>
         <div class="tools">
-        <article class="tool">
-          <div class="tool__head">
-            <img class="tool__icon" src="img/tool-figma.svg" width="72" height="72" alt="">
-            <div><h3 class="tool__name">Figma</h3><p class="tool__sub">Design System</p></div>
-          </div>
-          <p class="body">Tokens, Komponenten und Code Connect als Single Source of Truth. Automatisierte Flows und frühe Testskripte sichern die Qualität, eine strukturierte Doku macht das System für KI-Agenten lesbar.</p>
-        </article>
-        <article class="tool">
-          <div class="tool__head">
-            <img class="tool__icon" src="img/tool-claude.svg" width="72" height="72" alt="">
-            <div><h3 class="tool__name">Claude</h3><p class="tool__sub">Denken &amp; Bauen</p></div>
-          </div>
-          <p class="body">Kuratierte Markdown-Kontexte mit Regeln und Prompt-Vorlagen binden Claude in den Prozess ein – für Konzepte, Texte und Code im Rahmen des Design Systems.</p>
-        </article>
-        <article class="tool">
-          <div class="tool__head">
-            <img class="tool__icon" src="img/tool-lovable.svg" width="72" height="72" alt="">
-            <div><h3 class="tool__name">Lovable</h3><p class="tool__sub">Erlebbar machen</p></div>
-          </div>
-          <p class="body">Funktionale Prototypen mit generierten Testdaten und realistischen Szenarien. Ideen werden validiert, bevor sie in die Entwicklung gehen.</p>
-        </article>
+          <article class="tool">
+            <div class="tool__head">
+              <img class="tool__icon" src="img/tool-figma.svg" width="72" height="72" alt="">
+              <div><h3 class="tool__name">Figma</h3><p class="tool__sub">Design System</p></div>
+            </div>
+            <p class="body">Tokens, Komponenten und Code Connect als Single Source of Truth. Automatisierte Flows und frühe Testskripte sichern die Qualität, eine strukturierte Doku macht das System für KI-Agenten lesbar.</p>
+          </article>
+          <article class="tool">
+            <div class="tool__head">
+              <img class="tool__icon" src="img/tool-claude.svg" width="72" height="72" alt="">
+              <div><h3 class="tool__name">Claude</h3><p class="tool__sub">Denken &amp; Bauen</p></div>
+            </div>
+            <p class="body">Kuratierte Markdown-Kontexte mit Regeln und Prompt-Vorlagen binden Claude in den Prozess ein – für Konzepte, Texte und Code im Rahmen des Design Systems.</p>
+          </article>
+          <article class="tool">
+            <div class="tool__head">
+              <img class="tool__icon" src="img/tool-lovable.svg" width="72" height="72" alt="">
+              <div><h3 class="tool__name">Lovable</h3><p class="tool__sub">Erlebbar machen</p></div>
+            </div>
+            <p class="body">Funktionale Prototypen mit generierten Testdaten und realistischen Szenarien. Ideen werden validiert, bevor sie in die Entwicklung gehen.</p>
+          </article>
           <p class="lead tools__foot">Design bleibt die Entscheidung. KI und Automatisierung verkürzen den Weg dorthin.</p>
         </div>
       </section>
@@ -73,31 +78,31 @@
           <h2 class="section__title" id="ansatz-titel">Methodisch vom Problem zur skalierbaren Lösung.</h2>
         </div>
         <div class="bento">
-      <article class="tile tile--surface b-half">
-        <p class="label">Verstehen</p>
-        <h3>Kontext vor Oberfläche.</h3>
-        <p class="body">Stakeholder-Interviews, Kontextanalysen und Journey Mapping klären, wer das Produkt unter welchen Bedingungen nutzt. Daraus entstehen priorisierte Anforderungen statt Annahmen.</p>
-      </article>
-      <article class="tile tile--accent b-half">
-        <p class="label">Validieren</p>
-        <h3>Prototypen statt Präsentationen.</h3>
-        <p class="body">Funktionale Prototypen machen Szenarien früh testbar. Usability-Tests in kurzen Iterationszyklen liefern belastbare Erkenntnisse, bevor Entwicklungsaufwand entsteht.</p>
-      </article>
-      <article class="tile tile--warm b-third">
-        <p class="label">Skalieren</p>
-        <h3>Systeme, die tragen.</h3>
-        <p class="body">Design Systems mit Tokens, definierten Zuständen und Code-Bezug sichern Konsistenz über Produkte, Plattformen und Teams.</p>
-      </article>
-      <article class="tile tile--strong b-third">
-        <p class="label">Barrierefreiheit</p>
-        <h3>WCAG AA als Mindeststandard.</h3>
-        <p class="body">Regelmäßige A11y-Audits und die zugehörige Zertifizierung prägen meine Arbeit. KI-gestützte Skripte und Markdown-Regeln prüfen Kontraste, Fokusführung und Struktur schon im Entwurf – nicht erst im Audit.</p>
-      </article>
-      <article class="tile tile--surface b-third">
-        <p class="label">Zusammenarbeit</p>
-        <h3>Nah an Produkt und Vertrieb.</h3>
-        <p class="body">Design als Entscheidungsgrundlage für Produktmanagement, Entwicklung und Vertrieb – mit messbaren Zielen statt Geschmacksfragen.</p>
-      </article>
+          <article class="tile tile--surface b-half">
+            <p class="label">Verstehen</p>
+            <h3>Kontext vor Oberfläche.</h3>
+            <p class="body">Stakeholder-Interviews, Kontextanalysen und Journey Mapping klären, wer das Produkt unter welchen Bedingungen nutzt. Daraus entstehen priorisierte Anforderungen statt Annahmen.</p>
+          </article>
+          <article class="tile tile--accent b-half">
+            <p class="label">Validieren</p>
+            <h3>Prototypen statt Präsentationen.</h3>
+            <p class="body">Funktionale Prototypen machen Szenarien früh testbar. Usability-Tests in kurzen Iterationszyklen liefern belastbare Erkenntnisse, bevor Entwicklungsaufwand entsteht.</p>
+          </article>
+          <article class="tile tile--warm b-third">
+            <p class="label">Skalieren</p>
+            <h3>Systeme, die tragen.</h3>
+            <p class="body">Design Systems mit Tokens, definierten Zuständen und Code-Bezug sichern Konsistenz über Produkte, Plattformen und Teams.</p>
+          </article>
+          <article class="tile tile--strong b-third">
+            <p class="label">Barrierefreiheit</p>
+            <h3>WCAG AA als Mindeststandard.</h3>
+            <p class="body">Regelmäßige A11y-Audits und die zugehörige Zertifizierung prägen meine Arbeit. KI-gestützte Skripte und Markdown-Regeln prüfen Kontraste, Fokusführung und Struktur schon im Entwurf – nicht erst im Audit.</p>
+          </article>
+          <article class="tile tile--surface b-third">
+            <p class="label">Zusammenarbeit</p>
+            <h3>Nah an Produkt und Vertrieb.</h3>
+            <p class="body">Design als Entscheidungsgrundlage für Produktmanagement, Entwicklung und Vertrieb – mit messbaren Zielen statt Geschmacksfragen.</p>
+          </article>
         </div>
       </section>
 
@@ -108,18 +113,18 @@
             <h2 class="impact__title" id="wirkung-titel">UX-Design auf Basis von KPIs und OKRs.</h2>
           </div>
           <div class="kpis">
-      <div class="tile tile--surface tile--metric">
-        <p class="label">Banking · Design System</p>
-        <div class="tile__metric-group"><p class="metric">−70 %</p><p class="body">Aufwand für Design-Anpassungen</p></div>
-      </div>
-      <div class="tile tile--accent tile--metric">
-        <p class="label">Banken-IT · Migration</p>
-        <div class="tile__metric-group"><p class="metric">660</p><p class="body">Banken termingerecht migriert</p></div>
-      </div>
-      <div class="tile tile--surface tile--metric">
-        <p class="label">B2B-Logistik</p>
-        <div class="tile__metric-group"><p class="metric">+20 %</p><p class="body">Angebotsanfragen</p></div>
-      </div>
+            <div class="tile tile--surface tile--metric">
+              <p class="label">Banking · Design System</p>
+              <div class="tile__metric-group"><p class="metric">−70 %</p><p class="body">Aufwand für Design-Anpassungen</p></div>
+            </div>
+            <div class="tile tile--accent tile--metric">
+              <p class="label">Banken-IT · Migration</p>
+              <div class="tile__metric-group"><p class="metric">660</p><p class="body">Banken termingerecht migriert</p></div>
+            </div>
+            <div class="tile tile--surface tile--metric">
+              <p class="label">B2B-Logistik</p>
+              <div class="tile__metric-group"><p class="metric">+20 %</p><p class="body">Angebotsanfragen</p></div>
+            </div>
           </div>
         </div>
       </section>
@@ -131,8 +136,8 @@
             <h2 class="section__title" id="kontakt-titel" style="margin-top:12px">Lust auf ein Gespräch über Ihr nächstes Produkt?</h2>
           </div>
           <div class="contact__actions">
-            <a class="button" href="mailto:kontakt@newneed.de">E-Mail schreiben</a>
-            <a class="button button--ghost" href="https://www.linkedin.com/" rel="noopener">LinkedIn</a>
+            <a class="button js-mail" data-u="marc" data-d="newneed.de" href="impressum.html">E-Mail schreiben</a>
+            <a class="button button--ghost" href="https://www.linkedin.com/in/marc-schappach-b1103526/" rel="noopener">LinkedIn</a>
           </div>
         </div>
       </section>
@@ -151,5 +156,6 @@
     <a href="./#kontakt">Kontakt</a>
   </nav>
   <script src="js/theme.js"></script>
+  <script src="js/site.js"></script>
 </body>
 </html>

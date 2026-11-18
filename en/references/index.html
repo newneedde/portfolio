@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protected area – Marc Schappach</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+  <link rel="alternate" hreflang="de" href="../../referenzen/">
+  <link rel="alternate" hreflang="en" href="./">
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/site.css">
+
+  <!-- Gespeicherte Theme-Wahl vor dem ersten Rendern setzen (kein Flackern) -->
+  <script>
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#inhalt">Skip to content</a>
+
+  <div class="page page--gate">
+    <div class="topbar">
+      <a class="theme-toggle" id="lang-toggle" href="../../referenzen/" hreflang="de" aria-label="Language: EN – Auf Deutsch wechseln">Language: EN</a>
+      <button class="theme-toggle" id="theme-toggle" type="button">Theme: Auto</button>
+    </div>
+
+    <main id="inhalt" class="grid">
+      <section class="tile tile--surface gate" id="gate" aria-labelledby="gate-titel">
+        <p class="label">Protected area</p>
+        <h1 class="heading" id="gate-titel">References</h1>
+        <p class="body gate__copy">You’ll find the access code in my cover letter – or I’m happy to send it on request.</p>
+
+        <form id="gate-form" data-src="content.enc" novalidate>
+          <div class="field">
+            <label class="field__label" for="code">Access code</label>
+            <input class="field__input" id="code" name="code" type="text"
+                   autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"
+                   aria-describedby="code-hint code-error">
+            <p class="field__hint" id="code-hint">It’s in the cover letter, right below the subject line.</p>
+            <p class="field__error" id="code-error" role="alert" hidden>
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+                <circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M10 5.5v5.5M10 13.5v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <span id="code-error-text"></span>
+            </p>
+          </div>
+          <button class="button" id="gate-submit" type="submit" aria-disabled="false">Open area →</button>
+        </form>
+        <p class="label" id="gate-status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+  </div>
+
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../">Home</a>
+    <a class="nav__desktop" href="../#how-i-work">How I work</a>
+    <a class="nav__desktop" href="../#approach">Approach</a>
+    <a href="./" aria-current="page">References</a>
+    <a href="../#contact">Contact</a>
+  </nav>
+
+  <script src="../../js/theme.js"></script>
+  <script src="../../js/site.js"></script>
+  <script src="../../js/gate.js"></script>
+</body>
+</html>

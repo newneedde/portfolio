@@ -1,5 +1,7 @@
-/* Zugangsmaske: entschlüsselt inhalt.enc im Browser (PBKDF2-SHA256 → AES-256-GCM).
-   Der Klartext liegt nirgends im Repo – ohne den Code bleibt nur Chiffretext. */
+/* Zugangsmaske: entschlüsselt den Referenzinhalt im Browser (PBKDF2-SHA256 → AES-256-GCM).
+   Der Klartext liegt nirgends im Repo – ohne den Code bleibt nur Chiffretext.
+   Deutsch: referenzen/inhalt.enc · Englisch: en/references/content.enc (Datei steht in data-src).
+   Gleicher Code für beide Sprachen; einmal entsperrt, gilt er in der Browser-Sitzung für beide. */
 (function () {
   var form = document.getElementById("gate-form");
   var input = document.getElementById("code");
@@ -9,7 +11,25 @@
   var gate = document.getElementById("gate");
   var page = document.querySelector(".page");
   var live = document.getElementById("gate-status");
+  var SRC = form.getAttribute("data-src") || "inhalt.enc";
   var KEY = "zc";
+
+  var en = (document.documentElement.lang || "de").slice(0, 2) === "en";
+  var T = en ? {
+    checking: "Checking code …",
+    https: "This area needs a secure connection (https). Please open the page via its web address.",
+    empty: "Please enter the access code.",
+    load: "The content could not be loaded. Please try again later.",
+    wrong: "That code doesn't match. Upper and lower case, spaces and hyphens don't matter.",
+    nav: "References"
+  } : {
+    checking: "Code wird geprüft …",
+    https: "Dieser Bereich braucht eine sichere Verbindung (https). Bitte die Seite über die Webadresse öffnen.",
+    empty: "Bitte den Zugangscode eingeben.",
+    load: "Der Inhalt konnte nicht geladen werden. Bitte später erneut versuchen.",
+    wrong: "Der Code passt nicht. Groß- und Kleinschreibung sowie Bindestriche spielen keine Rolle.",
+    nav: "Referenzen"
+  };
 
   // Muss exakt zu quelle-privat/build-gate.mjs passen
   function normalize(s) {
@@ -22,7 +42,7 @@
   }
 
   async function decrypt(code) {
-    var res = await fetch("inhalt.enc", { cache: "no-cache" });
+    var res = await fetch(SRC, { cache: "no-cache" });
     if (!res.ok) throw new Error("load");
     var j = await res.json();
     var material = await crypto.subtle.importKey("raw", new TextEncoder().encode(normalize(code)), "PBKDF2", false, ["deriveKey"]);
@@ -41,11 +61,36 @@
     return data && data.pages[id] ? id : data.default;
   }
 
-  function render(first) {
-    var pg = data.pages[pageId()];
+  // Navigation zu allen Referenzseiten (oben auf jeder Referenz)
+  function refNav(activeId) {
+    var nav = document.createElement("nav");
+    nav.className = "ref-nav c-full";
+    nav.setAttribute("aria-label", T.nav);
+    var list = document.createElement("ul");
+    (data.order || Object.keys(data.pages)).forEach(function (id) {
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + id;
+      var num = document.createElement("span");
+      num.className = "ref-nav__num";
+      num.textContent = data.pages[id].num || "";
+      a.appendChild(num);
+      a.appendChild(document.createTextNode(data.pages[id].nav || id));
+      if (id === activeId) a.setAttribute("aria-current", "page");
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+    nav.appendChild(list);
+    return nav;
+  }
+
+  function render() {
+    var id = pageId();
+    var pg = data.pages[id];
     var tpl = document.createElement("template");
     tpl.innerHTML = pg.main;
     var next = tpl.content.firstElementChild;
+    next.insertBefore(refNav(id), next.firstChild);
     var current = document.getElementById("inhalt") || gate.closest("main");
     current.replaceWith(next);
     page.classList.remove("page--gate");
@@ -57,8 +102,8 @@
 
   function show(payload) {
     data = payload;
-    render(true);
-    window.addEventListener("hashchange", function () { render(false); });
+    render();
+    window.addEventListener("hashchange", render);
   }
 
   function fail(msg) {
@@ -70,11 +115,11 @@
 
   function busy(on) {
     button.setAttribute("aria-disabled", on ? "true" : "false");
-    live.textContent = on ? "Code wird geprüft …" : "";
+    live.textContent = on ? T.checking : "";
   }
 
   if (!window.crypto || !window.crypto.subtle) {
-    fail("Dieser Bereich braucht eine sichere Verbindung (https). Bitte die Seite über die Webadresse öffnen.");
+    fail(T.https);
     button.setAttribute("aria-disabled", "true");
     return;
   }
@@ -84,7 +129,7 @@
     if (button.getAttribute("aria-disabled") === "true") return;
     errorBox.hidden = true;
     input.removeAttribute("aria-invalid");
-    if (!normalize(input.value)) { fail("Bitte den Zugangscode eingeben."); return; }
+    if (!normalize(input.value)) { fail(T.empty); return; }
     busy(true);
     try {
       var payload = await decrypt(input.value);
@@ -92,13 +137,11 @@
       show(payload);
     } catch (err) {
       busy(false);
-      fail(err && err.message === "load"
-        ? "Der Inhalt konnte nicht geladen werden. Bitte später erneut versuchen."
-        : "Der Code passt nicht. Groß- und Kleinschreibung sowie Bindestriche spielen keine Rolle.");
+      fail(err && err.message === "load" ? T.load : T.wrong);
     }
   });
 
-  // Gleiche Browser-Sitzung: nicht erneut fragen
+  // Gleiche Browser-Sitzung (auch nach Sprachwechsel): nicht erneut fragen
   try {
     var saved = sessionStorage.getItem(KEY);
     if (saved) { busy(true); decrypt(saved).then(show).catch(function () { busy(false); try { sessionStorage.removeItem(KEY); } catch (x) {} }); }
