@@ -34,15 +34,15 @@
       <section class="tile tile--surface gate" id="gate" aria-labelledby="gate-titel">
         <p class="label">Protected area</p>
         <h1 class="heading" id="gate-titel">References</h1>
-        <p class="body gate__copy">You’ll find the access code in my cover letter – or I’m happy to send it on request.</p>
+        <p class="body gate__copy">The link in my application opens this area automatically. No link? Just ask me for access.</p>
 
-        <form id="gate-form" data-src="content.enc" novalidate>
+        <form id="gate-form" data-src="content.enc" data-keys="../../zugang.json" novalidate>
           <div class="field">
             <label class="field__label" for="code">Access code</label>
             <input class="field__input" id="code" name="code" type="text"
                    autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"
                    aria-describedby="code-hint code-error">
-            <p class="field__hint" id="code-hint">It’s in the cover letter, right below the subject line.</p>
+            <p class="field__hint" id="code-hint">You’ll find it in my application. Upper and lower case don’t matter.</p>
             <p class="field__error" id="code-error" role="alert" hidden>
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
                 <circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"/>
@@ -54,6 +54,7 @@
           <button class="button" id="gate-submit" type="submit" aria-disabled="false">Open area →</button>
         </form>
         <p class="label" id="gate-status" role="status" aria-live="polite"></p>
+        <p class="gate__request"><a class="js-mail" data-u="marc" data-d="newneed.de" data-subject="Access to your references" href="../#contact">Request access by email →</a></p>
       </section>
     </main>
   </div>

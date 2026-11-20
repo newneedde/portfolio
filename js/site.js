@@ -37,8 +37,9 @@
   for (var i = 0; i < mails.length; i++) {
     var el = mails[i];
     var addr = el.getAttribute("data-u") + "@" + el.getAttribute("data-d");
+    var subj = el.getAttribute("data-subject");
     if (el.tagName === "A") {
-      el.setAttribute("href", "mailto:" + addr);
+      el.setAttribute("href", "mailto:" + addr + (subj ? "?subject=" + encodeURIComponent(subj) : ""));
     } else {
       var a = document.createElement("a");
       a.href = "mailto:" + addr;

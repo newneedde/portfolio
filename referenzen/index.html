@@ -34,15 +34,15 @@
       <section class="tile tile--surface gate" id="gate" aria-labelledby="gate-titel">
         <p class="label">Geschützter Bereich</p>
         <h1 class="heading" id="gate-titel">Referenzen</h1>
-        <p class="body gate__copy">Den Zugangscode finden Sie im Anschreiben – oder ich sende ihn gern auf Anfrage.</p>
+        <p class="body gate__copy">Mit dem Link aus meiner Bewerbung öffnet sich dieser Bereich automatisch. Ohne Link fragen Sie den Zugang gern bei mir an.</p>
 
-        <form id="gate-form" data-src="inhalt.enc" novalidate>
+        <form id="gate-form" data-src="inhalt.enc" data-keys="../zugang.json" novalidate>
           <div class="field">
             <label class="field__label" for="code">Zugangscode</label>
             <input class="field__input" id="code" name="code" type="text"
                    autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"
                    aria-describedby="code-hint code-error">
-            <p class="field__hint" id="code-hint">Steht im Anschreiben unter dem Betreff.</p>
+            <p class="field__hint" id="code-hint">Steht in meiner Bewerbung. Groß- und Kleinschreibung spielen keine Rolle.</p>
             <p class="field__error" id="code-error" role="alert" hidden>
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
                 <circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"/>
@@ -54,6 +54,7 @@
           <button class="button" id="gate-submit" type="submit" aria-disabled="false">Bereich öffnen →</button>
         </form>
         <p class="label" id="gate-status" role="status" aria-live="polite"></p>
+        <p class="gate__request"><a class="js-mail" data-u="marc" data-d="newneed.de" data-subject="Zugang zu Ihren Referenzen" href="../#kontakt">Zugang per E-Mail anfragen →</a></p>
       </section>
     </main>
   </div>

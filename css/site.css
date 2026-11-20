@@ -200,8 +200,57 @@ a.theme-toggle {
 .tile--metric .body { color: var(--color-text-secondary); }
 .tile--strong.tile--metric .body { color: var(--color-text-on-strong); }
 
+/* Aufzählung: feiner Strich, Folgezeilen fluchten mit dem Text (hängender Einzug) */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+}
+.list li {
+  position: relative;
+  padding-left: 1.1em;
+}
 .list li::before {
-  content: "– ";
+  content: "–";
+  position: absolute;
+  left: 0;
+  font-weight: 300;
+  opacity: 0.45;
+}
+
+/* Deutsche Texte automatisch trennen (Video-telefonie statt Videotelefoni-e) */
+:lang(de) .heading,
+:lang(de) .lead,
+:lang(de) .body {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 7 3 3;
+  overflow-wrap: normal;
+}
+
+/* Große Titel nur an gesetzten Stellen trennen (&shy; im Text, z. B. Video|telefonie) */
+:lang(de) .display { -webkit-hyphens: manual; hyphens: manual; }
+
+/* Zustände der Live Activity: untereinander, ab Tablet zweispaltig */
+.states {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: start;
+}
+@media (min-width: 700px) {
+  .states { grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+.states img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 /* ---------- Kachel als Link: ganze Fläche klickbar ---------- */
@@ -209,8 +258,10 @@ a.tile {
   color: inherit;
   text-decoration: none;
 }
-a.tile:hover {
-  box-shadow: inset 0 0 0 2px var(--color-text-primary); /* Hover: Form, nicht nur Farbe */
+@media (hover: hover) {
+  a.tile:hover {
+    box-shadow: inset 0 0 0 2px var(--color-text-primary); /* Hover: Form, nicht nur Farbe */
+  }
 }
 a.tile:active {
   box-shadow: inset 0 0 0 3px var(--color-text-primary), inset 0 3px 8px rgb(0 0 0 / 0.18);
@@ -296,6 +347,7 @@ a.tile:active {
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  scroll-padding-inline: 24px;
   padding: 3px; /* Platz für Fokusrahmen */
   margin: -3px;
   scrollbar-width: none;
@@ -315,8 +367,8 @@ a.tile:active {
   text-decoration: none;
   white-space: nowrap;
 }
-.ref-nav a:hover {
-  box-shadow: inset 0 0 0 2px var(--color-text-primary);
+@media (hover: hover) {
+  .ref-nav a:hover { box-shadow: inset 0 0 0 2px var(--color-text-primary); }
 }
 .ref-nav a[aria-current="page"] {
   background: var(--color-bg-inverse);
@@ -381,6 +433,12 @@ a.tile:active {
 .button:hover { background: var(--color-bg-inverse-hover); box-shadow: inset 0 0 0 2px var(--color-text-primary); }
 .button[aria-disabled="true"] { opacity: 0.6; cursor: progress; }
 .gate form { display: flex; flex-direction: column; gap: 20px; }
+.gate__request { font-size: 16px; line-height: 22px; }
+.gate__request a {
+  color: var(--color-text-primary); font-weight: 600;
+  text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px;
+}
+.gate__request a:hover { text-decoration-thickness: 2px; }
 
 /* ---------- Referenz-Seiten: Handy-Bild-Kachel, Stapel, Textspalte ---------- */
 .stack { display: flex; flex-direction: column; gap: 12px; }

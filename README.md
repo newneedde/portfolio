@@ -17,6 +17,7 @@ Schriften (Inter, IBM Plex Mono) liegen lokal in `fonts/` – keine Verbindung z
 │   └── references/
 │       ├── index.html    Zugangsmaske (englisch)
 │       └── content.enc   verschlüsselter Inhalt, englisch
+├── zugang.json      Zugangscodes / Einladungslinks (nur verschlüsselt)
 ├── robots.txt
 └── .nojekyll
 ```
@@ -56,6 +57,9 @@ Aus Unterseiten entsprechend relativ, zum Beispiel `../referenzen/`. Die Navigat
 Der Inhalt liegt nur verschlüsselt in `referenzen/inhalt.enc` (AES-256-GCM, Schlüssel per PBKDF2 aus dem Code). Die Maske lädt die Datei, entschlüsselt sie im Browser und zeigt den Inhalt an. Ohne Code sieht man im Repo und im Netz nur Chiffretext.
 
 - Der Code wird nicht im Repo gespeichert.
+- **Einladungslink:** `https://www.newneed.de/referenzen/#show-me-more` (englisch: `…/en/references/#show-me-more`) öffnet den Bereich ohne Eingabe. Der Code verschwindet danach aus der Adresszeile; der Browser merkt ihn sich für beide Sprachen.
+- **Mehrere Codes:** `zugang.json` enthält je Zugangscode einen Eintrag mit dem verschlüsselten Hauptcode. Ein Eintrag weniger = dieser Code/Link gesperrt, alle anderen gelten weiter. Erzeugt wird die Datei mit `quelle-privat/zugang-erstellen.mjs`.
+- Ohne Link: „Zugang per E-Mail anfragen“ oder Code eingeben (Groß-/Kleinschreibung, Leer- und Satzzeichen egal).
 - Neuer Inhalt oder neuer Code: `inhalt.enc` und `en/references/content.enc` im privaten Ordner `quelle-privat` neu erzeugen (siehe dort) und pushen.
 - Oben auf jeder Referenz erscheint eine Navigation zu allen Referenzen (01 · 02 · 03).
 - Die Maske braucht https (GitHub Pages bietet das) und funktioniert nicht über `file://`; lokal testen mit `python3 -m http.server`.
