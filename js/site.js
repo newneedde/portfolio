@@ -14,6 +14,7 @@
       ["referenz-01", "reference-01"],
       ["referenz-02", "reference-02"],
       ["referenz-03", "reference-03"],
+      ["referenz-04", "reference-04"],
       ["referenz-05", "reference-05"]
     ];
     var toEn = (toggle.getAttribute("hreflang") || "") === "en";

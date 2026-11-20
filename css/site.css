@@ -406,3 +406,16 @@ a.tile:active {
 
 /* Programmatisch fokussierte Überschrift (nach dem Entsperren) ohne Rahmen */
 h1[tabindex="-1"]:focus { outline: none; }
+
+/* ---------- Bildpaare (Vorher/Nachher, Light/Dark) und Abschnittslabels ---------- */
+.duo { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--layout-gap); }
+.duo > .tile { min-height: 0; }
+.section-label { padding-top: 16px; }
+@media (min-width: 600px) {
+  .duo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .duo--editor { grid-template-columns: minmax(0, 498fr) minmax(0, 868fr); }
+}
+@media (min-width: 900px) {
+  .duo--compare { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .section-label { padding-top: 24px; }
+}
