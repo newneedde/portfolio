@@ -477,3 +477,38 @@ h1[tabindex="-1"]:focus { outline: none; }
   .duo--compare { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
   .section-label { padding-top: 24px; }
 }
+
+/* ---------- Referenz 05 · Banking: Hero, Screen-Reihen, Logowand ---------- */
+.hero-shot { width: 100%; height: auto; }
+
+.screens {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  justify-items: center;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+}
+.screens--accent { background: var(--color-bg-accent); }
+.screens--warm { background: var(--color-bg-warm); }
+.screens img { width: 100%; max-width: 262px; height: auto; }
+
+/* Logos sind dunkel: Fläche bleibt auch im Dunkelmodus hell (wie in Figma) */
+.logo-wall {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px 12px;
+  align-items: center;
+  justify-items: center;
+  margin: 0;
+  padding: 32px 20px;
+  list-style: none;
+  border-radius: var(--radius-lg);
+  background: light-dark(#ffffff, #f6f5f1);
+}
+.logo-wall img { max-width: 100%; height: auto; } /* Breite aus dem width-Attribut (halbe Exportgröße, 2x scharf) */
+
+@media (min-width: 900px) {
+  .screens { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; padding: 64px 48px; }
+  .logo-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 32px; padding: 56px 48px; }
+}

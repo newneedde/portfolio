@@ -11,7 +11,7 @@ Schriften (Inter, IBM Plex Mono) liegen lokal in `fonts/` – keine Verbindung z
 ├── index.html · impressum.html · datenschutz.html        Deutsch
 ├── referenzen/
 │   ├── index.html    Zugangsmaske
-│   └── inhalt.enc    verschlüsselter Inhalt, Referenz 01–03 (nur Chiffretext)
+│   └── inhalt.enc    verschlüsselter Inhalt, Referenz 01–06 (nur Chiffretext)
 ├── en/                                                   Englisch
 │   ├── index.html · imprint.html · privacy.html
 │   └── references/
@@ -61,5 +61,5 @@ Der Inhalt liegt nur verschlüsselt in `referenzen/inhalt.enc` (AES-256-GCM, Sch
 - **Mehrere Codes:** `zugang.json` enthält je Zugangscode einen Eintrag mit dem verschlüsselten Hauptcode. Ein Eintrag weniger = dieser Code/Link gesperrt, alle anderen gelten weiter. Erzeugt wird die Datei mit `quelle-privat/zugang-erstellen.mjs`.
 - Ohne Link: „Zugang per E-Mail anfragen“ oder Code eingeben (Groß-/Kleinschreibung, Leer- und Satzzeichen egal).
 - Neuer Inhalt oder neuer Code: `inhalt.enc` und `en/references/content.enc` im privaten Ordner `quelle-privat` neu erzeugen (siehe dort) und pushen.
-- Oben auf jeder Referenz erscheint eine Navigation zu allen Referenzen (01 · 02 · 03).
+- Oben auf jeder Referenz erscheint eine Navigation zu allen Referenzen (01–06; 05 Banking-Studie, 06 Mini Figure Out).
 - Die Maske braucht https (GitHub Pages bietet das) und funktioniert nicht über `file://`; lokal testen mit `python3 -m http.server`.
