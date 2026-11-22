@@ -512,3 +512,18 @@ h1[tabindex="-1"]:focus { outline: none; }
   .screens { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px; padding: 64px 48px; }
   .logo-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 32px; padding: 56px 48px; }
 }
+
+/* Blättern: einheitlich Zurück (links) und Weiter (rechts) am Ende jeder Referenz */
+.pager {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--layout-gap);
+}
+.pager .tile { min-height: 160px; }
+.pager__num { white-space: nowrap; }
+@media (max-width: 599px) {
+  .pager .lead { font-size: 18px; line-height: 24px; hyphens: auto; }
+}
+@media (min-width: 900px) {
+  .pager .tile { min-height: 200px; }
+}
