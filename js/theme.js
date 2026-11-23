@@ -56,8 +56,15 @@
     order.forEach(function (key) { buttons[key].setAttribute("aria-pressed", key === c ? "true" : "false"); });
   }
 
+  // Überblenden zwischen den Darstellungen (View Transitions API, wo vorhanden; sonst direkt)
+  var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   function set(next) {
     if (next === current()) return;
+    if (document.startViewTransition && !reduce) document.startViewTransition(function () { apply(next); });
+    else apply(next);
+  }
+
+  function apply(next) {
     if (next === "auto") root.removeAttribute("data-theme");
     else root.setAttribute("data-theme", next);
     try { if (next === "auto") localStorage.removeItem("theme"); else localStorage.setItem("theme", next); } catch (e) {}

@@ -28,7 +28,59 @@
     }
     requestAnimationFrame(frame);
   }
+  /* ---------- Überschriften wortweise einfärben, Abbildungen gestaffelt ---------- */
+  var WORD_STAGGER = 45, WORD_MAX = 16, IMG_STAGGER = 80;
+  function splitWords(el) {
+    var i = 0;
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var parts = n.textContent.split(/(\s+)/);
+          if (parts.length < 2 && !n.textContent.trim()) return;
+          var frag = document.createDocumentFragment();
+          parts.forEach(function (p) {
+            if (!p) return;
+            if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+            var w = document.createElement("span");
+            w.className = "e-w";
+            w.style.setProperty("--i", Math.min(i++, WORD_MAX));
+            w.textContent = p;
+            frag.appendChild(w);
+          });
+          n.parentNode.replaceChild(frag, n);
+        } else if (n.nodeType === 1 && n.tagName !== "BR") {
+          walk(n);
+        }
+      });
+    })(el);
+  }
+  function reveal(scope) {
+    if (reduce || !("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        en.target.classList.add("is-in");
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+    Array.prototype.forEach.call(scope.querySelectorAll(".e-display, .e-heading, .e-quote, .e-step__title"), function (el) {
+      if (el.classList.contains("e-words")) return;
+      splitWords(el);
+      el.classList.add("e-words");
+      io.observe(el);
+    });
+    Array.prototype.forEach.call(scope.querySelectorAll(".e-fig"), function (fig) {
+      if (fig.classList.contains("e-rise")) return;
+      Array.prototype.forEach.call(fig.querySelectorAll(".e-stage img"), function (img, k) {
+        img.style.setProperty("--i", k);
+      });
+      fig.classList.add("e-rise");
+      io.observe(fig);
+    });
+  }
+
   function enhance(scope) {
+    reveal(scope || document);
     var els = (scope || document).querySelectorAll("[data-count]:not([data-final])");
     if (!els.length) return;
     var canAnimate = !reduce && "IntersectionObserver" in window && "requestAnimationFrame" in window;
@@ -90,7 +142,12 @@
     }
   }
 
-  function apply() { placeNav(); swapStart(); }
+  function apply() {
+    var docEl = document.documentElement;
+    var ratio = window.scrollY / Math.max(1, docEl.scrollHeight - window.innerHeight);
+    placeNav(); swapStart();
+    if (tpl && window.scrollY > 0) window.scrollTo(0, Math.round(ratio * Math.max(0, docEl.scrollHeight - window.innerHeight)));
+  }
 
   window.Editorial = { enhance: enhance, isEditorial: isEditorial };
   document.addEventListener("themechange", apply);

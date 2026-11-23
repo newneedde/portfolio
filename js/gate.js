@@ -144,10 +144,15 @@
     return !!(pg.editorial && window.Editorial && window.Editorial.isEditorial());
   }
 
-  function render() {
+  function render(keepPosition) {
+    if (keepPosition && keepPosition.type) keepPosition = true; // Aufruf über Ereignis (themechange)
+    if (keepPosition !== true) keepPosition = false;
     var id = pageId();
     var pg = data.pages[id];
     var editorial = useEditorial(pg);
+    // Beim Wechsel der Darstellung an ungefähr derselben Stelle bleiben (Layouts sind unterschiedlich lang)
+    var docEl = document.documentElement;
+    var ratio = keepPosition ? window.scrollY / Math.max(1, docEl.scrollHeight - window.innerHeight) : 0;
     var tpl = document.createElement("template");
     tpl.innerHTML = editorial ? pg.editorial : pg.main;
     var next = tpl.content.firstElementChild;
@@ -172,20 +177,26 @@
     var active = list && list.querySelector('[aria-current="page"]');
     if (active) {
       var r = active.getBoundingClientRect(), lr = list.getBoundingClientRect();
-      list.scrollLeft += (r.left - lr.left) - (list.clientWidth - r.width) / 2;
+      var left = list.scrollLeft + (r.left - lr.left) - (list.clientWidth - r.width) / 2;
+      var smooth = editorial && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+      if (list.scrollTo) list.scrollTo({ left: left, behavior: smooth ? "smooth" : "auto" }); else list.scrollLeft = left;
     }
     var h1 = next.querySelector("h1");
-    if (h1) { h1.setAttribute("tabindex", "-1"); h1.focus({ preventScroll: true }); }
-    window.scrollTo(0, 0);
+    if (!keepPosition) {
+      if (h1) { h1.setAttribute("tabindex", "-1"); h1.focus({ preventScroll: true }); }
+      window.scrollTo(0, 0);
+    } else {
+      window.scrollTo(0, Math.round(ratio * Math.max(0, docEl.scrollHeight - window.innerHeight)));
+    }
     if (editorial) window.Editorial.enhance(next);
   }
 
   function show(payload) {
     data = payload;
     render();
-    window.addEventListener("hashchange", render);
+    window.addEventListener("hashchange", function () { render(false); });
     // Darstellung gewechselt: dieselbe Referenz in der anderen Fassung zeigen
-    document.addEventListener("themechange", render);
+    document.addEventListener("themechange", function () { render(true); });
   }
 
   function fail(msg) {
