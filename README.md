@@ -11,7 +11,8 @@ Schriften (Inter, IBM Plex Mono) liegen lokal in `fonts/` – keine Verbindung z
 ├── index.html · impressum.html · datenschutz.html        Deutsch
 ├── referenzen/
 │   ├── index.html    Zugangsmaske
-│   └── inhalt.enc    verschlüsselter Inhalt, Referenz 01–07 (nur Chiffretext)
+│   ├── inhalt.enc    verschlüsselter Inhalt, Referenz 01–07 (nur Chiffretext)
+│   └── medien/       verschlüsselte Loop-Videos (media-05.bin seaexplorer-Karte, media-06.bin Banking-Assistent)
 ├── en/                                                   Englisch
 │   ├── index.html · imprint.html · privacy.html
 │   └── references/
@@ -78,3 +79,30 @@ Der Schalter oben rechts bietet **Automatisch · Hell · Dunkel · Editorial** (
   - Hover: Unterstreichung in Navigation, Index und Schalter wächst von links; Pfeil bei Zurück/Weiter rückt 4 px; der Index scrollt sanft zur aktiven Referenz.
   - Wechsel der Darstellung blendet über (View Transitions, 0,35 s) und hält die Scrollposition ungefähr.
 - **Wichtig für `quelle-privat`:** Wer `inhalt.enc` neu erzeugt, muss die Editorial-Fassung mit hinein nehmen (`build_editorial.py` aus dem Paket „quelle-privat-editorial“), sonst fällt die Referenz im Editorial-Modus auf Bento zurück.
+
+## Videos in den Referenzen (Editorial)
+
+Referenz 05 (Schritt 2, seaexplorer-Karte) und Referenz 06 (Schritt 1, Banking-Assistent) zeigen statt Standbildern kurze Loop-Videos (MP4/H.264, 11,4 s bzw. 22 s, je ca. 0,5 MB).
+
+- Die Videos liegen **verschlüsselt** in `referenzen/medien/*.bin` (12 Byte IV + AES-256-GCM, gleicher Schlüssel wie `inhalt.enc`) – ohne Code nur Chiffretext, genau wie der übrige Referenzinhalt.
+- `js/gate.js` lädt ein Video erst, wenn es auf 300 px an den sichtbaren Bereich herankommt, entschlüsselt es im Browser und spielt es, solange mindestens 40 % sichtbar sind; beim Herausscrollen pausiert es.
+- Bis dahin zeigt das Video sein Poster (erstes Bild des Loops, im Inhalt eingebettet).
+- „Bewegung reduzieren“: kein Autoplay, das Poster bleibt stehen, Abspielen über die eingeblendete Steuerung.
+- Banking: neben dem Video steht ab 900 px Breite die Ablaufleiste 01–04 (Figma „Bühne“ Schritt 1); auf Mobile nur das Video.
+- **Wichtig für `quelle-privat`:** Wer `inhalt.enc` neu erzeugt, muss die Videos wieder einsetzen und `medien/*.bin` mit dem neuen Salz neu verschlüsseln – mit `videos_einbauen.py` aus dem Paket „quelle-privat-videos“.
+
+## Farben Editorial
+
+Akzent nach Figma-Primitives `azure/*` (vorher Moosgrün):
+
+| Token | Wert | Einsatz |
+|---|---|---|
+| `--e-azure-700` | `#316cff` | große Serif-Akzente (Titelzeile, Kennzahlen, Zitat), Linien, Fokusring |
+| `--e-azure-800` | `#2a5cd9` | Akzent in kleiner Schrift, Flächen mit weißer Schrift – erfüllt WCAG AA (5,13 : 1 auf Papier, 5,78 : 1 mit Weiß) |
+| `--e-azure-100` | `#e0e4ed` | Fläche „Was ich mitnehme“ |
+
+`#316cff` erreicht auf dem Papierton nur 3,95 : 1 und ist deshalb nur für große Schrift (AA Large) und Nicht-Text-Elemente eingesetzt.
+
+## Cache
+
+CSS- und JS-Links tragen einen Versionsparameter (`?v=20261123`). Bei jeder Änderung an `css/` oder `js/` den Wert in allen HTML-Dateien erhöhen, sonst zeigen Browser und GitHub Pages bis zu einigen Stunden noch die alte Fassung.

@@ -9,7 +9,12 @@
    Einträge erzeugt quelle-privat/zugang-erstellen.mjs (liegt nicht im Repo).
 
    Einladungslink: …/referenzen/#show-me-more → öffnet ohne Eingabe; der Code wird danach
-   aus der Adresszeile entfernt und im Browser gemerkt (gilt für beide Sprachen). */
+   aus der Adresszeile entfernt und im Browser gemerkt (gilt für beide Sprachen).
+
+   Videos: <video data-media="media-05"> im Referenzinhalt. Die Datei liegt verschlüsselt in
+   medien/media-05.bin (12 Byte IV + AES-GCM-Chiffretext, Schlüssel = derselbe wie für inhalt.enc).
+   Sie wird erst geladen, wenn das Video in die Nähe des sichtbaren Bereichs kommt, und spielt nur,
+   solange es sichtbar ist. Bei „Bewegung reduzieren“ bleibt das Poster stehen (Abspielen per Steuerung). */
 (function () {
   var form = document.getElementById("gate-form");
   var input = document.getElementById("code");
@@ -22,6 +27,7 @@
   var SRC = form.getAttribute("data-src") || "inhalt.enc";
   var KEYS = form.getAttribute("data-keys") || "../zugang.json";
   var STORE = "zc";
+  var MEDIA = form.getAttribute("data-media") || "medien/";
 
   var en = (document.documentElement.lang || "de").slice(0, 2) === "en";
   var T = en ? {
@@ -53,6 +59,7 @@
   }
 
   var encPromise = null, keysPromise = null;
+  var unlocked = null; // { secret, box } nach erfolgreichem Öffnen – Schlüssel auch für Videos
   function loadEnc() {
     if (!encPromise) encPromise = fetch(SRC, { cache: "no-cache" }).then(function (r) {
       if (!r.ok) throw new Error("load");
@@ -68,12 +75,20 @@
     return keysPromise;
   }
 
+  var keyCache = {};
+  async function deriveKey(secret, box) {
+    var id = secret + "|" + box.salt + "|" + box.iter;
+    if (!keyCache[id]) {
+      var material = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), "PBKDF2", false, ["deriveKey"]);
+      keyCache[id] = await crypto.subtle.deriveKey(
+        { name: "PBKDF2", hash: "SHA-256", salt: b64(box.salt), iterations: box.iter },
+        material, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
+      );
+    }
+    return keyCache[id];
+  }
   async function open(box, secret) {
-    var material = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), "PBKDF2", false, ["deriveKey"]);
-    var key = await crypto.subtle.deriveKey(
-      { name: "PBKDF2", hash: "SHA-256", salt: b64(box.salt), iterations: box.iter },
-      material, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
-    );
+    var key = await deriveKey(secret, box);
     return new Uint8Array(await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(box.iv) }, key, b64(box.ct)));
   }
 
@@ -85,7 +100,9 @@
     for (var i = 0; i < keys.length && master === null; i++) {
       try { master = new TextDecoder().decode(await open(keys[i], n)); } catch (e) {}
     }
-    var plain = await open(enc, master !== null ? master : n); // wirft bei falschem Code
+    var secret = master !== null ? master : n;
+    var plain = await open(enc, secret); // wirft bei falschem Code
+    unlocked = { secret: secret, box: enc };
     return JSON.parse(new TextDecoder().decode(plain));
   }
 
@@ -144,6 +161,64 @@
     return !!(pg.editorial && window.Editorial && window.Editorial.isEditorial());
   }
 
+
+  /* ---------- Videos ---------- */
+  var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var mediaUrls = {};
+  function mediaUrl(name) {
+    if (!mediaUrls[name]) {
+      mediaUrls[name] = fetch(MEDIA + name + ".bin", { cache: "no-cache" }).then(function (r) {
+        if (!r.ok) throw new Error("load");
+        return r.arrayBuffer();
+      }).then(async function (buf) {
+        var key = await deriveKey(unlocked.secret, unlocked.box);
+        var bytes = new Uint8Array(buf);
+        var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: bytes.slice(0, 12) }, key, bytes.slice(12));
+        return URL.createObjectURL(new Blob([plain], { type: "video/mp4" }));
+      }).catch(function (e) { delete mediaUrls[name]; throw e; });
+    }
+    return mediaUrls[name];
+  }
+  var videoObservers = [];
+  function setupVideos(scope) {
+    videoObservers.forEach(function (o) { o.disconnect(); });
+    videoObservers = [];
+    var videos = scope.querySelectorAll("video[data-media]");
+    if (!videos.length || !unlocked) return;
+    function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    function load(v) {
+      if (v.getAttribute("data-loaded")) return;
+      v.setAttribute("data-loaded", "1");
+      mediaUrl(v.getAttribute("data-media")).then(function (url) {
+        v.src = url;
+        if (v.getAttribute("data-visible") && !reduceMotion) play(v);
+      }).catch(function () { v.removeAttribute("data-loaded"); });
+    }
+    Array.prototype.forEach.call(videos, function (v) {
+      v.muted = true; // Voraussetzung für Autoplay in allen Browsern
+      if (reduceMotion) v.setAttribute("controls", "");
+    });
+    if (!("IntersectionObserver" in window)) {
+      Array.prototype.forEach.call(videos, function (v) { v.setAttribute("data-visible", "1"); load(v); });
+      return;
+    }
+    // 1) Vorladen: sobald das Video 300 px vor dem sichtbaren Bereich ist
+    var near = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { load(en.target); near.unobserve(en.target); } });
+    }, { rootMargin: "300px 0px" });
+    // 2) Abspielen nur, solange mindestens 40 % sichtbar sind
+    var seen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var v = en.target, visible = en.isIntersecting && en.intersectionRatio >= 0.4;
+        if (visible) v.setAttribute("data-visible", "1"); else v.removeAttribute("data-visible");
+        if (!v.src || reduceMotion) return;
+        if (visible) play(v); else v.pause();
+      });
+    }, { threshold: [0, 0.4] });
+    Array.prototype.forEach.call(videos, function (v) { near.observe(v); seen.observe(v); });
+    videoObservers = [near, seen];
+  }
+
   function render(keepPosition) {
     if (keepPosition && keepPosition.type) keepPosition = true; // Aufruf über Ereignis (themechange)
     if (keepPosition !== true) keepPosition = false;
@@ -189,6 +264,7 @@
       window.scrollTo(0, Math.round(ratio * Math.max(0, docEl.scrollHeight - window.innerHeight)));
     }
     if (editorial) window.Editorial.enhance(next);
+    setupVideos(next);
   }
 
   function show(payload) {

@@ -44,8 +44,10 @@
   --e-paper-300: #cecec2;
   --e-olive-600: #65665d;
   --e-ink-900: #252822;
-  --e-moss-100: #e2e7df;
-  --e-moss-700: #3e5945;
+  --e-azure-100: #e0e4ed;
+  --e-azure-300: #92aef5;
+  --e-azure-700: #316cff; /* Figma azure/700 – Akzent für große Schrift, Linien, Fokus */
+  --e-azure-800: #2a5cd9; /* Figma azure/800 – Akzent für kleine Schrift und Flächen mit weißer Schrift (WCAG AA) */
   --e-white: #ffffff;
   --e-red-700: #9b1c14;
 
@@ -53,16 +55,17 @@
   --e-bg-page: var(--e-paper-50);
   --e-bg-surface: var(--e-white);
   --e-bg-stage: var(--e-paper-100);
-  --e-bg-highlight: var(--e-moss-100);
-  --e-bg-strong: var(--e-moss-700);
+  --e-bg-highlight: var(--e-azure-100);
+  --e-bg-strong: var(--e-azure-800);   /* weiße Schrift 5,78 : 1 */
   --e-text-primary: var(--e-ink-900);
   --e-text-secondary: var(--e-olive-600);
-  --e-text-accent: var(--e-moss-700);
+  --e-text-accent: var(--e-azure-800);       /* 5,13 : 1 auf Papier */
+  --e-text-accent-large: var(--e-azure-700); /* 3,95 : 1 – nur ab großer Schrift (AA Large) */
   --e-text-on-strong: var(--e-white);
   --e-border-rule: var(--e-paper-300);
-  --e-border-accent: var(--e-moss-700);
+  --e-border-accent: var(--e-azure-700);
   --e-border-control: var(--e-olive-600);
-  --e-focus: var(--e-moss-700);
+  --e-focus: var(--e-azure-700);
   --e-error: var(--e-red-700);
 
   /* Schriften */
@@ -303,7 +306,7 @@
   letter-spacing: 0;
 }
 .e-display > span { display: block; }
-.e-display .e-it { font-style: italic; color: var(--e-text-accent); }
+.e-display .e-it { font-style: italic; color: var(--e-text-accent-large); }
 .e-heading {
   font-family: var(--e-serif);
   font-weight: 400;
@@ -316,7 +319,7 @@
   font-weight: 400;
   font-size: var(--e-quote-size);
   line-height: var(--e-quote-line);
-  color: var(--e-text-accent);
+  color: var(--e-text-accent-large);
 }
 
 /* Titel */
@@ -361,7 +364,7 @@
   font-family: var(--e-serif);
   font-size: var(--e-metric-size);
   line-height: var(--e-metric-line);
-  color: var(--e-text-accent);
+  color: var(--e-text-accent-large);
   font-variant-numeric: tabular-nums lining-nums;
   white-space: nowrap;
 }
@@ -437,7 +440,45 @@
 }
 @media (min-width: 900px) { .e-logos { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 32px; } }
 
-/* Was ich mitnehme – Salbei-Fläche über die volle Breite */
+/* Videos (Loop, startet im sichtbaren Bereich – Steuerung in gate.js) */
+.e-video { display: block; width: 100%; height: auto; background: var(--e-bg-surface); }
+.e-stage--video { padding: var(--e-stage-pad); }
+.e-video--browser {
+  max-width: 1024px;
+  aspect-ratio: 1440 / 770;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(37, 40, 34, 0.14), 0 2px 6px rgba(37, 40, 34, 0.08);
+}
+@media (min-width: 900px) { .e-video--browser { border-radius: 12px; } }
+.e-video--phone {
+  flex: 0 0 auto;
+  width: 272px;
+  max-width: 100%;
+  aspect-ratio: 778 / 1686;
+  border-radius: 30px;
+  background: #0d0d0d;
+}
+@media (min-width: 900px) {
+  .e-stage--sequence { gap: 96px; flex-wrap: nowrap; }
+  .e-video--phone { width: 240px; }
+}
+/* Ablauf neben dem Banking-Video (Figma: Bühne Schritt 1); auf Mobile nur das Video */
+.e-sequence { display: none; margin: 0; padding: 0; list-style: none; width: 420px; max-width: 100%; }
+@media (min-width: 900px) { .e-sequence { display: block; } }
+.e-sequence li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 20px;
+  padding: 18px 0;
+  border-top: 1px solid var(--e-border-rule);
+}
+.e-sequence li:last-child { border-bottom: 1px solid var(--e-border-rule); }
+.e-sequence__num { font-size: var(--e-label-size); line-height: var(--e-label-line); font-weight: 500; color: var(--e-text-secondary); }
+.e-sequence__text { display: grid; gap: 4px; }
+.e-sequence__title { font-size: var(--e-body-size); line-height: var(--e-body-line); }
+.e-sequence__desc { font-size: var(--e-label-size); line-height: var(--e-label-line); color: var(--e-text-secondary); }
+
+/* Was ich mitnehme – Azur-Fläche über die volle Breite */
 .e-takeaway {
   display: grid;
   gap: 24px;
@@ -465,7 +506,7 @@
 }
 .e-pager__title { font-family: var(--e-serif); font-size: var(--e-pager-size); line-height: var(--e-pager-line); }
 @media (hover: hover) {
-  .e-pager a:hover .e-pager__title { color: var(--e-text-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+  .e-pager a:hover .e-pager__title { color: var(--e-text-accent-large); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
 }
 
 /* Buttons und Links */
