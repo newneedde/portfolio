@@ -15,8 +15,10 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/site.css">
   <link rel="stylesheet" href="css/start.css">
+  <link rel="stylesheet" href="css/editorial.css">
+  <style>[data-theme="editorial"] .page--start > main:not(.e-main) { visibility: hidden; }</style>
   <script>
-    try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+    try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark" || t === "editorial") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
   </script>
 </head>
 <body>
@@ -155,7 +157,62 @@
     <a href="referenzen/">Referenzen</a>
     <a href="./#kontakt">Kontakt</a>
   </nav>
+  <template id="editorial-start">
+    <main id="inhalt" class="e-main">
+      <section class="e-hero e-sec" aria-labelledby="titel">
+        <div class="e-hero__text">
+          <p class="e-meta e-meta--accent">UX/UI Design · München</p>
+          <h1 class="e-display" id="titel"><span>Design, das</span> <span class="e-it">früh funktioniert.</span></h1>
+          <p class="e-lead e-measure">Design Lead für komplexe B2B-Produkte. Ich verbinde Design Systems, automatisierte Flows und funktionale Prototypen, damit Teams früher testen und sicherer entscheiden.</p>
+        </div>
+        <figure class="e-hero__photo">
+          <img src="img/marc-schappach.jpg" width="373" height="440" alt="Porträt von Marc Schappach">
+        </figure>
+      </section>
+
+      <section class="e-sec e-stack" id="arbeitsweise" aria-labelledby="arbeitsweise-titel">
+        <h2 class="e-mark" id="arbeitsweise-titel">01 / Arbeitsweise</h2>
+        <p class="e-heading">Vom Entwurf zum lauffähigen Prototyp – in einem Zug.</p>
+        <div class="e-cols">
+          <div class="e-tool"><img src="img/tool-figma.svg" width="56" height="56" alt=""><div class="e-col"><h3>Figma · Design System</h3><p class="e-body">Tokens, Komponenten und Code Connect als Single Source of Truth. Automatisierte Flows und frühe Testskripte sichern die Qualität, eine strukturierte Doku macht das System für KI-Agenten lesbar.</p></div></div>
+          <div class="e-tool"><img src="img/tool-claude.svg" width="56" height="56" alt=""><div class="e-col"><h3>Claude · Denken &amp; Bauen</h3><p class="e-body">Kuratierte Markdown-Kontexte mit Regeln und Prompt-Vorlagen binden Claude in den Prozess ein – für Konzepte, Texte und Code im Rahmen des Design Systems.</p></div></div>
+          <div class="e-tool"><img src="img/tool-lovable.svg" width="56" height="56" alt=""><div class="e-col"><h3>Lovable · Erlebbar machen</h3><p class="e-body">Funktionale Prototypen mit generierten Testdaten und realistischen Szenarien. Ideen werden validiert, bevor sie in die Entwicklung gehen.</p></div></div>
+        </div>
+        <p class="e-quote">Design bleibt die Entscheidung. KI und Automatisierung verkürzen den Weg dorthin.</p>
+      </section>
+
+      <section class="e-sec e-stack" id="ansatz" aria-labelledby="ansatz-titel">
+        <h2 class="e-mark" id="ansatz-titel">02 / Ansatz</h2>
+        <p class="e-heading">Methodisch vom Problem zur skalierbaren Lösung.</p>
+        <div class="e-step__head"><p class="e-step__label">Verstehen</p><div class="e-step__row"><h3 class="e-step__title">Kontext vor Oberfläche.</h3><p class="e-body">Stakeholder-Interviews, Kontextanalysen und Journey Mapping klären, wer das Produkt unter welchen Bedingungen nutzt. Daraus entstehen priorisierte Anforderungen statt Annahmen.</p></div></div>
+        <div class="e-step__head"><p class="e-step__label">Validieren</p><div class="e-step__row"><h3 class="e-step__title">Prototypen statt Präsentationen.</h3><p class="e-body">Funktionale Prototypen machen Szenarien früh testbar. Usability-Tests in kurzen Iterationszyklen liefern belastbare Erkenntnisse, bevor Entwicklungsaufwand entsteht.</p></div></div>
+        <div class="e-step__head"><p class="e-step__label">Skalieren</p><div class="e-step__row"><h3 class="e-step__title">Systeme, die tragen.</h3><p class="e-body">Design Systems mit Tokens, definierten Zuständen und Code-Bezug sichern Konsistenz über Produkte, Plattformen und Teams.</p></div></div>
+        <div class="e-step__head"><p class="e-step__label">Barrierefreiheit</p><div class="e-step__row"><h3 class="e-step__title">WCAG AA als Mindeststandard.</h3><p class="e-body">Regelmäßige A11y-Audits und die zugehörige Zertifizierung prägen meine Arbeit. KI-gestützte Skripte und Markdown-Regeln prüfen Kontraste, Fokusführung und Struktur schon im Entwurf – nicht erst im Audit.</p></div></div>
+        <div class="e-step__head"><p class="e-step__label">Zusammenarbeit</p><div class="e-step__row"><h3 class="e-step__title">Nah an Produkt und Vertrieb.</h3><p class="e-body">Design als Entscheidungsgrundlage für Produktmanagement, Entwicklung und Vertrieb – mit messbaren Zielen statt Geschmacksfragen.</p></div></div>
+      </section>
+
+      <section class="e-sec e-stack" id="wirkung" aria-labelledby="wirkung-titel">
+        <h2 class="e-mark" id="wirkung-titel">03 / Wirkung</h2>
+        <p class="e-heading">UX-Design auf Basis von KPIs und OKRs.</p>
+        <div class="e-kpis">
+          <div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">+10 %</span><span aria-hidden="true" data-count>+10&nbsp;%</span></p><p class="e-kpi__text">MRR gestiegen, Jahresziel erreicht · Alerting und Krisenmanagement</p></div>
+          <div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">+20 %</span><span aria-hidden="true" data-count>+20&nbsp;%</span></p><p class="e-kpi__text">Angebotsanfragen · B2B-Logistik</p></div>
+          <div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">−70 %</span><span aria-hidden="true" data-count>−70&nbsp;%</span></p><p class="e-kpi__text">Aufwand für Design-Anpassungen · Banking Design System</p></div>
+        </div>
+      </section>
+
+      <section class="e-sec e-takeaway" id="kontakt" aria-labelledby="kontakt-titel">
+        <p class="e-label">04 / Kontakt</p>
+        <h2 class="e-quote" id="kontakt-titel">Lust auf ein Gespräch über Ihr nächstes Produkt?</h2>
+        <div class="e-actions">
+          <a class="e-button js-mail" data-u="marc" data-d="newneed.de" href="impressum.html">E-Mail schreiben</a>
+          <a class="e-link" href="https://www.linkedin.com/in/marc-schappach-b1103526/" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </section>
+    </main>
+  </template>
   <script src="js/theme.js"></script>
   <script src="js/site.js"></script>
+  <script src="js/editorial.js"></script>
 </body>
 </html>

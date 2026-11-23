@@ -527,3 +527,43 @@ h1[tabindex="-1"]:focus { outline: none; }
 @media (min-width: 900px) {
   .pager .tile { min-height: 200px; }
 }
+
+/* ---------- Darstellungs-Schalter: Automatisch · Hell · Dunkel · Editorial ---------- */
+.topbar { flex-wrap: wrap; }
+.theme-switch {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.theme-switch__label { padding: 0 6px 0 16px; }
+.theme-switch button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+.theme-switch button:hover { box-shadow: inset 0 0 0 2px var(--color-text-primary); color: var(--color-text-primary); }
+.theme-switch button[aria-pressed="true"] { background: var(--color-bg-surface); color: var(--color-text-primary); }
+.theme-switch__short { display: none; }
+@media (max-width: 599px) {
+  .theme-switch__label { padding-left: 0; }
+  .theme-switch button:has(.theme-switch__short) .theme-switch__long { display: none; }
+  .theme-switch__short { display: inline; }
+}
+/* Schalterleiste liegt über den Deko-Kreisen der Startseite */
+.topbar { position: relative; z-index: 2; }

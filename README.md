@@ -1,13 +1,13 @@
-# Portfolio (Mobile first, Light & Dark)
+# Portfolio (Mobile first, Hell · Dunkel · Editorial)
 
 Statische Seite ohne Build-Schritt für GitHub Pages: HTML, CSS und etwas JavaScript.
 Schriften (Inter, IBM Plex Mono) liegen lokal in `fonts/` – keine Verbindung zu Drittanbietern.
 
 ```
 .
-├── css/        tokens.css (Figma-Variablen, Light/Dark) · site.css (Layout, Kacheln, Maske)
-├── js/         theme.js (Hell/Dunkel) · site.js (Sprachschalter DE/EN, E-Mail) · gate.js (Zugangsmaske)
-├── fonts/      Inter, IBM Plex Mono (woff2) + Lizenzen
+├── css/        tokens.css (Figma-Variablen, Light/Dark) · site.css (Layout, Kacheln, Maske) · editorial.css (Darstellung Editorial)
+├── js/         theme.js (Automatisch/Hell/Dunkel/Editorial) · site.js (Sprachschalter DE/EN, E-Mail) · editorial.js (Editorial, Hochzählen) · gate.js (Zugangsmaske)
+├── fonts/      Inter, IBM Plex Mono, Instrument Serif, Geist (woff2) + Lizenzen
 ├── index.html · impressum.html · datenschutz.html        Deutsch
 ├── referenzen/
 │   ├── index.html    Zugangsmaske
@@ -63,3 +63,13 @@ Der Inhalt liegt nur verschlüsselt in `referenzen/inhalt.enc` (AES-256-GCM, Sch
 - Neuer Inhalt oder neuer Code: `inhalt.enc` und `en/references/content.enc` im privaten Ordner `quelle-privat` neu erzeugen (siehe dort) und pushen.
 - Oben auf jeder Referenz erscheint eine Navigation zu allen Referenzen (01–07; 05 Logistik/Kuehne+Nagel, 06 Banking-Studie, 07 Mini Figure Out).
 - Die Maske braucht https (GitHub Pages bietet das) und funktioniert nicht über `file://`; lokal testen mit `python3 -m http.server`.
+
+## Darstellung „Editorial“
+
+Der Schalter oben rechts bietet **Automatisch · Hell · Dunkel · Editorial** (Wahl wird im Browser gemerkt). Editorial gibt es vorerst nur auf den deutschen Seiten; die englischen Seiten bieten Auto · Light · Dark.
+
+- Gestaltung 1:1 aus Figma „CV 2026“, Seite „Website editorial“ (Theme-Modus Editorial, Responsive 390/1280). Schriften Instrument Serif und Geist liegen lokal in `fonts/` (SIL OFL).
+- Startseite: Die Editorial-Fassung steht in `index.html` als `<template id="editorial-start">` und wird von `js/editorial.js` eingesetzt.
+- Referenzen: `inhalt.enc` enthält je Referenz zusätzlich `editorial` (HTML). Bilder werden nicht doppelt gespeichert – `<img data-ref="N">` übernimmt das N-te Bild der Bento-Fassung.
+- Kennzahlen mit Plus- und Normalwerten zählen beim ersten Sichtbarwerden kurz hoch (0,9 s); Minuswerte bleiben stehen. Bei „Bewegung reduzieren“ keine Animation; Screenreader lesen nur den Endwert.
+- **Wichtig für `quelle-privat`:** Wer `inhalt.enc` neu erzeugt, muss die Editorial-Fassung mit hinein nehmen (`build_editorial.py` aus dem Paket „quelle-privat-editorial“), sonst fällt die Referenz im Editorial-Modus auf Bento zurück.

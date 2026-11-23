@@ -129,12 +129,39 @@
     return nav;
   }
 
+  // Editorial-Fassung einer Referenz (pages[id].editorial) nutzt die Bilder der Bento-Fassung:
+  // <img data-ref="3"> bekommt Quelle, Maße und Alternativtext des 4. Bildes aus pages[id].main.
+  var bentoImgs = {};
+  function imagesOf(id) {
+    if (!bentoImgs[id]) {
+      var t = document.createElement("template");
+      t.innerHTML = data.pages[id].main;
+      bentoImgs[id] = t.content.querySelectorAll("img");
+    }
+    return bentoImgs[id];
+  }
+  function useEditorial(pg) {
+    return !!(pg.editorial && window.Editorial && window.Editorial.isEditorial());
+  }
+
   function render() {
     var id = pageId();
     var pg = data.pages[id];
+    var editorial = useEditorial(pg);
     var tpl = document.createElement("template");
-    tpl.innerHTML = pg.main;
+    tpl.innerHTML = editorial ? pg.editorial : pg.main;
     var next = tpl.content.firstElementChild;
+    if (editorial) {
+      var imgs = imagesOf(id);
+      Array.prototype.forEach.call(next.querySelectorAll("img[data-ref]"), function (img) {
+        var src = imgs[parseInt(img.getAttribute("data-ref"), 10)];
+        if (!src) return;
+        img.src = src.getAttribute("src");
+        ["width", "height", "alt"].forEach(function (a) {
+          if (!img.hasAttribute(a) && src.hasAttribute(a)) img.setAttribute(a, src.getAttribute(a));
+        });
+      });
+    }
     next.insertBefore(refNav(id), next.firstChild);
     var current = document.getElementById("inhalt") || gate.closest("main");
     current.replaceWith(next);
@@ -150,12 +177,15 @@
     var h1 = next.querySelector("h1");
     if (h1) { h1.setAttribute("tabindex", "-1"); h1.focus({ preventScroll: true }); }
     window.scrollTo(0, 0);
+    if (editorial) window.Editorial.enhance(next);
   }
 
   function show(payload) {
     data = payload;
     render();
     window.addEventListener("hashchange", render);
+    // Darstellung gewechselt: dieselbe Referenz in der anderen Fassung zeigen
+    document.addEventListener("themechange", render);
   }
 
   function fail(msg) {

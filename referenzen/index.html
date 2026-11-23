@@ -12,12 +12,13 @@
   <link rel="alternate" hreflang="en" href="../en/references/">
   <link rel="stylesheet" href="../css/tokens.css">
   <link rel="stylesheet" href="../css/site.css">
+  <link rel="stylesheet" href="../css/editorial.css">
 
   <!-- Gespeicherte Theme-Wahl vor dem ersten Rendern setzen (kein Flackern) -->
   <script>
     try {
       var t = localStorage.getItem("theme");
-      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      if (t === "light" || t === "dark" || t === "editorial") document.documentElement.setAttribute("data-theme", t);
     } catch (e) {}
   </script>
 </head>
@@ -69,6 +70,7 @@
 
   <script src="../js/theme.js"></script>
   <script src="../js/site.js"></script>
+  <script src="../js/editorial.js"></script>
   <script src="../js/gate.js"></script>
 </body>
 </html>
