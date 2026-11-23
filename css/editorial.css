@@ -2,7 +2,8 @@
    Darstellung „Editorial“ – 1:1 aus Figma „CV 2026“
    Theme-Modus „Editorial“, Responsive-Modi „390“ (Mobile) und „1280“ (Desktop),
    Text-Styles Editorial/* (Instrument Serif + Geist).
-   Aktiv nur mit <html data-theme="editorial">; Bento (Hell/Dunkel) bleibt unberührt.
+   Aktiv mit <html data-view="editorial">; hell/dunkel über data-theme="light|dark"
+   oder (ohne Attribut) über die Systemeinstellung. Bento bleibt unberührt.
    ========================================================================== */
 
 @font-face {
@@ -35,7 +36,7 @@
 }
 
 /* ---------- Tokens (Figma: Primitives + Theme-Modus Editorial) ---------- */
-:root[data-theme="editorial"] {
+:root[data-view="editorial"] {
   color-scheme: light;
 
   /* Primitives */
@@ -50,6 +51,14 @@
   --e-azure-800: #2a5cd9; /* Figma azure/800 – Akzent für kleine Schrift und Flächen mit weißer Schrift (WCAG AA) */
   --e-white: #ffffff;
   --e-red-700: #9b1c14;
+  /* Primitives Dunkel (Figma: night/*) */
+  --e-night-950: #151713;
+  --e-night-900: #1c1f1a;
+  --e-night-800: #262922;
+  --e-night-700: #3a3d35;
+  --e-night-400: #a3a596;
+  --e-night-azure: #1b2233;
+  --e-night-error: #ff8a7a;
 
   /* Semantik (color/*) */
   --e-bg-page: var(--e-paper-50);
@@ -57,6 +66,7 @@
   --e-bg-stage: var(--e-paper-100);
   --e-bg-highlight: var(--e-azure-100);
   --e-bg-strong: var(--e-azure-800);   /* weiße Schrift 5,78 : 1 */
+  --e-bg-strong-hover: var(--e-ink-900);
   --e-text-primary: var(--e-ink-900);
   --e-text-secondary: var(--e-olive-600);
   --e-text-accent: var(--e-azure-800);       /* 5,13 : 1 auf Papier */
@@ -116,7 +126,7 @@
 }
 
 @media (min-width: 900px) {
-  :root[data-theme="editorial"] {
+  :root[data-view="editorial"] {
     /* Responsive „1280“ */
     --e-display-size: 104px; --e-display-line: 100px;
     --e-heading-size: 52px;  --e-heading-line: 57px;
@@ -137,20 +147,67 @@
   }
 }
 
+
+/* ---------- Editorial Dunkel (Figma: Theme-Modus „Editorial Dunkel“) ----------
+   Gilt bei data-theme="dark" oder – ohne feste Wahl – wenn das System dunkel ist.
+   Kontraste auf night/950: Text 16 : 1 · Sekundär 7,2 : 1 · Akzent 8,2 : 1 · Button 8,2 : 1 */
+:root[data-view="editorial"][data-theme="dark"] {
+  color-scheme: dark;
+  --e-bg-page: var(--e-night-950);
+  --e-bg-surface: var(--e-night-900);
+  --e-bg-stage: var(--e-night-800);
+  --e-bg-highlight: var(--e-night-azure);
+  --e-bg-strong: var(--e-azure-300);
+  --e-bg-strong-hover: var(--e-paper-300);
+  --e-text-primary: var(--e-paper-50);
+  --e-text-secondary: var(--e-night-400);
+  --e-text-accent: var(--e-azure-300);
+  --e-text-accent-large: var(--e-azure-300);
+  --e-text-on-strong: var(--e-night-950);
+  --e-border-rule: var(--e-night-700);
+  --e-border-accent: var(--e-azure-300);
+  --e-border-control: var(--e-night-400);
+  --e-focus: var(--e-azure-300);
+  --e-error: var(--e-night-error);
+  --color-bg-inverse-hover: var(--e-paper-300);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-view="editorial"]:not([data-theme="light"]) {
+    color-scheme: dark;
+    --e-bg-page: var(--e-night-950);
+    --e-bg-surface: var(--e-night-900);
+    --e-bg-stage: var(--e-night-800);
+    --e-bg-highlight: var(--e-night-azure);
+    --e-bg-strong: var(--e-azure-300);
+    --e-bg-strong-hover: var(--e-paper-300);
+    --e-text-primary: var(--e-paper-50);
+    --e-text-secondary: var(--e-night-400);
+    --e-text-accent: var(--e-azure-300);
+    --e-text-accent-large: var(--e-azure-300);
+    --e-text-on-strong: var(--e-night-950);
+    --e-border-rule: var(--e-night-700);
+    --e-border-accent: var(--e-azure-300);
+    --e-border-control: var(--e-night-400);
+    --e-focus: var(--e-azure-300);
+    --e-error: var(--e-night-error);
+    --color-bg-inverse-hover: var(--e-paper-300);
+  }
+}
+
 /* ---------- Grundlagen ---------- */
-[data-theme="editorial"] body {
+[data-view="editorial"] body {
   background: var(--e-bg-page);
   color: var(--e-text-primary);
   font-family: var(--e-sans);
   font-size: var(--e-body-size);
   line-height: var(--e-body-line);
 }
-[data-theme="editorial"] :focus-visible {
+[data-view="editorial"] :focus-visible {
   outline: 2px solid var(--e-focus);
   outline-offset: 3px;
 }
-[data-theme="editorial"] .page { padding-bottom: 0; }
-[data-theme="editorial"] .skip-link { border-radius: 0; }
+[data-view="editorial"] .page { padding-bottom: 0; }
+[data-view="editorial"] .skip-link { border-radius: 0; }
 
 .e-sr {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -158,13 +215,13 @@
 }
 
 /* ---------- Kopfzeile: Schalterleiste + Navigation ---------- */
-[data-theme="editorial"] .topbar {
+[data-view="editorial"] .topbar {
   padding: 16px 0 8px;
   flex-wrap: wrap;
   row-gap: 8px;
 }
-[data-theme="editorial"] .theme-toggle,
-[data-theme="editorial"] .theme-switch {
+[data-view="editorial"] .theme-toggle,
+[data-view="editorial"] .theme-switch {
   min-height: 0;
   padding: 4px 8px;
   border-radius: 0;
@@ -174,22 +231,22 @@
   letter-spacing: 0.04em;
   color: var(--e-text-secondary);
 }
-[data-theme="editorial"] .theme-switch { padding: 0; }
-[data-theme="editorial"] .theme-switch button {
+[data-view="editorial"] .theme-switch { padding: 0; }
+[data-view="editorial"] .theme-switch button {
   min-height: 24px; /* WCAG 2.5.8 */
   padding: 4px 8px;
   border-radius: 0;
   color: var(--e-text-secondary);
 }
-[data-theme="editorial"] .theme-switch button[aria-pressed="true"] {
+[data-view="editorial"] .theme-switch button[aria-pressed="true"] {
   background: none;
   color: var(--e-text-accent);
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-[data-theme="editorial"] .theme-switch button:hover,
-[data-theme="editorial"] .theme-toggle:hover {
+[data-view="editorial"] .theme-switch button:hover,
+[data-view="editorial"] .theme-toggle:hover {
   box-shadow: none;
   color: var(--e-text-primary);
   text-decoration: underline;
@@ -197,7 +254,7 @@
 }
 
 /* Navigation: im Editorial-Modus als Zeile unter der Schalterleiste (editorial.js verschiebt sie) */
-[data-theme="editorial"] .nav {
+[data-view="editorial"] .nav {
   position: static;
   transform: none;
   display: flex;
@@ -209,7 +266,7 @@
   box-shadow: none;
   border-bottom: 1px solid var(--e-border-rule);
 }
-[data-theme="editorial"] .nav__brand {
+[data-view="editorial"] .nav__brand {
   margin-right: auto;
   font-size: var(--e-label-size);
   line-height: var(--e-label-line);
@@ -217,7 +274,7 @@
   color: var(--e-text-primary);
   white-space: nowrap;
 }
-[data-theme="editorial"] .nav a {
+[data-view="editorial"] .nav a {
   min-height: 24px;
   padding: 4px 8px;
   border-radius: 0;
@@ -225,30 +282,30 @@
   line-height: var(--e-nav-line);
   color: var(--e-text-primary);
 }
-[data-theme="editorial"] .nav a:hover { box-shadow: none; color: var(--e-text-accent); text-decoration: underline; text-underline-offset: 4px; }
-[data-theme="editorial"] .nav a[aria-current="page"] {
+[data-view="editorial"] .nav a:hover { box-shadow: none; color: var(--e-text-accent); text-decoration: underline; text-underline-offset: 4px; }
+[data-view="editorial"] .nav a[aria-current="page"] {
   background: none;
   color: var(--e-text-accent);
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-[data-theme="editorial"] .nav a:last-child { margin-right: -8px; }
+[data-view="editorial"] .nav a:last-child { margin-right: -8px; }
 @media (max-width: 599px) {
-  [data-theme="editorial"] .nav__brand { display: none; }
-  [data-theme="editorial"] .nav { justify-content: flex-start; margin-left: -8px; }
+  [data-view="editorial"] .nav__brand { display: none; }
+  [data-view="editorial"] .nav { justify-content: flex-start; margin-left: -8px; }
 }
 
 /* Projektindex (Referenz-Navigation) */
-[data-theme="editorial"] .ref-nav {
+[data-view="editorial"] .ref-nav {
   padding: 12px 0;
   border-bottom: 1px solid var(--e-border-rule);
 }
-[data-theme="editorial"] .ref-nav ul { gap: 16px; }
+[data-view="editorial"] .ref-nav ul { gap: 16px; }
 @media (min-width: 900px) {
-  [data-theme="editorial"] .ref-nav ul { justify-content: space-between; }
+  [data-view="editorial"] .ref-nav ul { justify-content: space-between; }
 }
-[data-theme="editorial"] .ref-nav a {
+[data-view="editorial"] .ref-nav a {
   min-height: 24px;
   padding: 4px 8px;
   gap: 6px;
@@ -258,15 +315,15 @@
   line-height: var(--e-label-line);
   color: var(--e-text-secondary);
 }
-[data-theme="editorial"] .ref-nav a:hover { box-shadow: none; color: var(--e-text-accent); text-decoration: underline; text-underline-offset: 4px; }
-[data-theme="editorial"] .ref-nav a[aria-current="page"] {
+[data-view="editorial"] .ref-nav a:hover { box-shadow: none; color: var(--e-text-accent); text-decoration: underline; text-underline-offset: 4px; }
+[data-view="editorial"] .ref-nav a[aria-current="page"] {
   background: none;
   color: var(--e-text-accent);
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-[data-theme="editorial"] .ref-nav__num { font-family: inherit; font-size: inherit; letter-spacing: 0; }
+[data-view="editorial"] .ref-nav__num { font-family: inherit; font-size: inherit; letter-spacing: 0; }
 
 /* ---------- Editorial-Seiten (Start und Referenzen) ---------- */
 .e-main { display: block; }
@@ -527,7 +584,7 @@
   text-decoration: none;
   cursor: pointer;
 }
-.e-button:hover { background: var(--e-ink-900); }
+.e-button:hover { background: var(--e-bg-strong-hover); }
 .e-link {
   display: inline-flex;
   align-items: center;
@@ -556,55 +613,56 @@
 .e-tool img { width: 56px; height: 56px; border-radius: 16px; }
 
 /* Zugang (Maske vor dem Entsperren) */
-[data-theme="editorial"] .page--gate .grid { max-width: var(--e-measure); padding-top: var(--e-section); }
-[data-theme="editorial"] .gate {
+[data-view="editorial"] .page--gate .grid { display: block; max-width: none; padding-top: 0; }
+[data-view="editorial"] .page--gate .gate { max-width: var(--e-measure); margin: var(--e-section) auto 0; }
+[data-view="editorial"] .gate {
   padding: 0 0 var(--e-section);
   background: none;
   gap: 24px;
 }
-[data-theme="editorial"] .gate > .label {
+[data-view="editorial"] .gate > .label {
   font-family: var(--e-sans);
   font-size: var(--e-meta-size);
   line-height: var(--e-meta-line);
   font-weight: 500;
   color: var(--e-text-accent);
 }
-[data-theme="editorial"] .gate .heading {
+[data-view="editorial"] .gate .heading {
   font-family: var(--e-serif);
   font-size: var(--e-display-size);
   line-height: var(--e-display-line);
   letter-spacing: 0;
 }
-[data-theme="editorial"] .gate__copy { color: var(--e-text-primary); font-size: var(--e-body-size); line-height: var(--e-body-line); }
-[data-theme="editorial"] .field__label { font-weight: 500; font-size: var(--e-label-size); line-height: var(--e-label-line); }
-[data-theme="editorial"] .field__input { border-radius: 0; background: var(--e-bg-surface); }
-[data-theme="editorial"] .field__input:focus-visible { outline: 2px solid var(--e-focus); outline-offset: 0; }
-[data-theme="editorial"] .field__hint,
-[data-theme="editorial"] .field__error { font-size: var(--e-label-size); line-height: var(--e-label-line); }
-[data-theme="editorial"] .field__error { font-weight: 500; }
-[data-theme="editorial"] .button {
+[data-view="editorial"] .gate__copy { color: var(--e-text-primary); font-size: var(--e-body-size); line-height: var(--e-body-line); }
+[data-view="editorial"] .field__label { font-weight: 500; font-size: var(--e-label-size); line-height: var(--e-label-line); }
+[data-view="editorial"] .field__input { border-radius: 0; background: var(--e-bg-surface); }
+[data-view="editorial"] .field__input:focus-visible { outline: 2px solid var(--e-focus); outline-offset: 0; }
+[data-view="editorial"] .field__hint,
+[data-view="editorial"] .field__error { font-size: var(--e-label-size); line-height: var(--e-label-line); }
+[data-view="editorial"] .field__error { font-weight: 500; }
+[data-view="editorial"] .button {
   width: auto;
   align-self: flex-start;
   border-radius: 0;
   font-weight: 500;
   font-size: var(--e-nav-size);
 }
-[data-theme="editorial"] .button:hover { box-shadow: none; }
-[data-theme="editorial"] .gate__request a { color: var(--e-text-accent); font-weight: 500; }
+[data-view="editorial"] .button:hover { box-shadow: none; }
+[data-view="editorial"] .gate__request a { color: var(--e-text-accent); font-weight: 500; }
 
 /* Rechtliches, Fußzeile */
-[data-theme="editorial"] .footer {
+[data-view="editorial"] .footer {
   padding: 32px 0 48px;
   border-top: 1px solid var(--e-border-rule);
   font-size: var(--e-label-size);
   line-height: var(--e-label-line);
   color: var(--e-text-secondary);
 }
-[data-theme="editorial"] .footer a { color: var(--e-text-secondary); }
-[data-theme="editorial"] .footer a:hover { color: var(--e-text-accent); }
-[data-theme="editorial"] .legal h1 { font-family: var(--e-serif); font-weight: 400; font-size: var(--e-display-size); line-height: var(--e-display-line); }
-[data-theme="editorial"] .legal h2 { font-family: var(--e-serif); font-weight: 400; font-size: var(--e-step-size); line-height: var(--e-step-line); }
-[data-theme="editorial"] .legal a { color: var(--e-text-accent); }
+[data-view="editorial"] .footer a { color: var(--e-text-secondary); }
+[data-view="editorial"] .footer a:hover { color: var(--e-text-accent); }
+[data-view="editorial"] .legal h1 { font-family: var(--e-serif); font-weight: 400; font-size: var(--e-display-size); line-height: var(--e-display-line); }
+[data-view="editorial"] .legal h2 { font-family: var(--e-serif); font-weight: 400; font-size: var(--e-step-size); line-height: var(--e-step-line); }
+[data-view="editorial"] .legal a { color: var(--e-text-accent); }
 
 /* Deutsche Trennung wie im Bento-Stil */
 :lang(de) .e-body, :lang(de) .e-small, :lang(de) .e-lead, :lang(de) .e-kpi__text, :lang(de) .e-heading, :lang(de) .e-step__title {
@@ -618,7 +676,7 @@
    Bewegung – subtil, einmalig, nur ohne „Bewegung reduzieren“
    (Klassen e-words / e-rise setzt editorial.js erst, wenn Animation erlaubt ist)
    ========================================================================== */
-:root[data-theme="editorial"] { --e-ease: cubic-bezier(0.22, 0.61, 0.36, 1); }
+:root[data-view="editorial"] { --e-ease: cubic-bezier(0.22, 0.61, 0.36, 1); }
 
 /* Überschriften: Wort für Wort von Hellgrau zur Endfarbe */
 .e-words .e-w {
@@ -634,9 +692,9 @@
 .e-rise.is-in, .e-rise.is-in .e-stage img { opacity: 1; transform: none; }
 
 /* Hover: Unterstreichung wächst von links */
-[data-theme="editorial"] .nav a,
-[data-theme="editorial"] .ref-nav a,
-[data-theme="editorial"] .theme-switch button {
+[data-view="editorial"] .nav a,
+[data-view="editorial"] .ref-nav a,
+[data-view="editorial"] .theme-switch button {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
@@ -646,12 +704,12 @@
   background-size: 0 1px;
   transition: background-size 0.25s var(--e-ease), color 0.2s ease;
 }
-[data-theme="editorial"] .nav a:hover,
-[data-theme="editorial"] .ref-nav a:hover,
-[data-theme="editorial"] .theme-switch button:hover,
-[data-theme="editorial"] .nav a[aria-current="page"],
-[data-theme="editorial"] .ref-nav a[aria-current="page"],
-[data-theme="editorial"] .theme-switch button[aria-pressed="true"] {
+[data-view="editorial"] .nav a:hover,
+[data-view="editorial"] .ref-nav a:hover,
+[data-view="editorial"] .theme-switch button:hover,
+[data-view="editorial"] .nav a[aria-current="page"],
+[data-view="editorial"] .ref-nav a[aria-current="page"],
+[data-view="editorial"] .theme-switch button[aria-pressed="true"] {
   text-decoration: none;
   background-size: 100% 1px;
 }
@@ -676,3 +734,86 @@
 /* Porträt: die JPG-Datei hat runde Ecken eingebrannt – im Editorial-Stil leicht beschneiden */
 .e-hero__photo { overflow: hidden; }
 .e-hero__photo img { transform: scale(1.1); transform-origin: 50% 40%; }
+
+/* ==========================================================================
+   Release 24.11.2026
+   ========================================================================== */
+
+/* Schalterleiste: Sprache links, Darstellung + Hell/Dunkel rechts (ohne Beschriftung) */
+[data-view="editorial"] .theme-switch a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  color: var(--e-text-secondary);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-clip: content-box;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size 0.25s var(--e-ease), color 0.2s ease;
+}
+[data-view="editorial"] .theme-switch a:hover { color: var(--e-text-primary); background-size: 100% 1px; }
+[data-view="editorial"] .theme-switch a[aria-current] { color: var(--e-text-accent); font-weight: 500; background-size: 100% 1px; }
+[data-view="editorial"] .lang-switch { margin-left: -8px; }
+[data-view="editorial"] .topbar__end { gap: 12px; margin-right: -4px; }
+[data-view="editorial"] .mode-toggle {
+  width: 32px; height: 32px; min-height: 0;
+  border-radius: 0;
+  color: var(--e-text-primary);
+}
+[data-view="editorial"] .mode-toggle:hover { box-shadow: none; color: var(--e-text-accent); }
+[data-view="editorial"] .mode-toggle svg { width: 16px; height: 16px; }
+
+/* Logos bleiben im Dunkeln auf heller Papierfläche (dunkle Original-Logos) */
+@media (prefers-color-scheme: dark) {
+  :root[data-view="editorial"]:not([data-theme="light"]) .e-stage:has(.e-logos) { background: var(--e-paper-100); }
+}
+:root[data-view="editorial"][data-theme="dark"] .e-stage:has(.e-logos) { background: var(--e-paper-100); }
+
+/* Zweispalter: Bild links, nummerierte Erklärung rechts, ohne eigene Fläche
+   (Figma: Bühne in Arbeit 01 Schritt 1, Arbeit 03 und 04 Titelbild). Mobile: untereinander. */
+.e-stage--sequence {
+  display: grid;
+  gap: 32px;
+  padding: 0;
+  background: none;
+  justify-items: center;
+  align-items: center;
+}
+.e-stage--sequence .e-sequence { display: block; width: 100%; }
+.e-duo__media { display: flex; justify-content: center; width: 100%; }
+.e-duo__media img { width: 100%; max-width: var(--w, 100%); height: auto; }
+@media (min-width: 900px) {
+  .e-stage--sequence { grid-template-columns: minmax(0, 680fr) minmax(0, 408fr); gap: 64px; justify-items: stretch; }
+  .e-stage--sequence > .e-video--phone { justify-self: center; }
+}
+/* Zeitversetzt: erst das Bild, dann die Punkte nacheinander */
+.e-rise .e-sequence li { opacity: 0; transform: translateY(8px); transition: opacity 0.45s var(--e-ease), transform 0.45s var(--e-ease); transition-delay: calc(350ms + var(--i, 0) * 140ms); }
+.e-rise.is-in .e-sequence li { opacity: 1; transform: none; }
+.e-rise .e-duo__media img { opacity: 0; transform: translateY(12px); transition: opacity 0.5s var(--e-ease), transform 0.5s var(--e-ease); transition-delay: 150ms; }
+.e-rise.is-in .e-duo__media img { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .e-rise .e-sequence li, .e-rise .e-duo__media img { opacity: 1; transform: none; transition: none; }
+}
+
+/* Startseite: Kopf mit Buttons und Markenzeile, 4 Leistungen, 4 Kennzahlen */
+.e-hero__text .e-actions { padding-top: 8px; }
+.e-brands { font-size: var(--e-label-size); line-height: var(--e-label-line); color: var(--e-text-secondary); max-width: var(--e-measure); }
+@media (min-width: 900px) {
+  .e-cols--4, .e-kpis--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.e-intro { max-width: var(--e-measure); }
+.e-step__num { font-variant-numeric: tabular-nums; }
+
+/* Zugang zu Arbeit 02–07 (Editorial) */
+[data-view="editorial"] .page--gate .ref-nav { margin-bottom: 0; }
+
+/* Ergebnis ohne Zusatztext: Satz über die volle Breite */
+@media (min-width: 900px) { .e-step__row--wide { grid-template-columns: 1fr; } }
+.e-pager > span:empty { display: none; }
+@media (min-width: 900px) { .e-pager > span:empty { display: block; } }
+/* Browser-Standardabstand bei h3 entfernen (Titel und Text stehen oben bündig, wie in Figma) */
+.e-main h3, .e-main dl { margin: 0; }

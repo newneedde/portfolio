@@ -1,4 +1,4 @@
-# Portfolio (Mobile first, Hell · Dunkel · Editorial)
+# Portfolio (Mobile first · Bento und Editorial · Hell und Dunkel · DE/EN)
 
 Statische Seite ohne Build-Schritt für GitHub Pages: HTML, CSS und etwas JavaScript.
 Schriften (Inter, IBM Plex Mono) liegen lokal in `fonts/` – keine Verbindung zu Drittanbietern.
@@ -65,9 +65,28 @@ Der Inhalt liegt nur verschlüsselt in `referenzen/inhalt.enc` (AES-256-GCM, Sch
 - Oben auf jeder Referenz erscheint eine Navigation zu allen Referenzen (01–07; 05 Logistik/Kuehne+Nagel, 06 Banking-Studie, 07 Mini Figure Out).
 - Die Maske braucht https (GitHub Pages bietet das) und funktioniert nicht über `file://`; lokal testen mit `python3 -m http.server`.
 
-## Darstellung „Editorial“
+## Darstellung, Hell/Dunkel, Sprache (Stand 24.11.2026)
 
-Der Schalter oben rechts bietet **Automatisch · Hell · Dunkel · Editorial** (Wahl wird im Browser gemerkt). Editorial gibt es vorerst nur auf den deutschen Seiten; die englischen Seiten bieten Auto · Light · Dark.
+Oben links: **Deutsch · English** (Links auf die Gegenseite, Anker werden mitübersetzt – `js/site.js`).
+Oben rechts: **Bento · Editorial** und ein Knopf **Hell/Dunkel** (Sonne = hell, Mond = dunkel; Klick wechselt).
+
+- Zwei unabhängige Einstellungen, im Browser gemerkt: `view` (Standard **Editorial**) und `mode` (ohne Wahl gilt die Systemeinstellung).
+- HTML-Attribute: `<html data-view="editorial">` und `data-theme="light|dark"`. Die alte Einstellung `theme` wird beim ersten Besuch übernommen und aufgeräumt.
+- Editorial gibt es jetzt auf Deutsch und Englisch, jeweils hell und dunkel (Figma-Modus „Editorial Dunkel“, Tokens in `css/editorial.css`, alle Kontraste WCAG AA).
+- Bento ist unverändert (alte Texte, Referenz 01–07 hinter dem Code).
+
+## Arbeiten (Editorial)
+
+Neue Reihenfolge: **01 Banking (öffentlich)** · Zugang · 02 Design System · 03 Chat und Video · 04 Basisalarm · 05 Alarmierung · 06 Logistik · 07 Mini Figure Out.
+
+- `referenzen/` (EN `en/references/`) zeigt ohne Code **Arbeit 01 aiba** aus `<template id="arbeit-oeffentlich">`; Bilder in `img/arbeiten/`, Video in `media/`.
+- `#arbeit-02` … `#arbeit-07` (EN `#work-02` …) zeigen ohne Code die Zugangsmaske, mit Code den verschlüsselten Inhalt (`works` in `inhalt.enc` / `content.enc`).
+- Erzeugt wird alles mit `quelle-privat/arbeiten_bauen.py <repo> <hauptcode>` (Texte in `quelle-privat/arbeiten_texte.py`). Der Hauptcode und die Klartexte liegen nie im Repo.
+- Zweispalter (Bild links, nummerierte Erklärung rechts, ohne Fläche): Arbeit 01 Schritt 1, Arbeit 03 und 04 Titelbild. Beim Sichtbarwerden erst das Bild, dann die Punkte nacheinander; bei „Bewegung reduzieren“ ohne Animation.
+- `referenzen/medien/media-06.bin` wird nicht mehr gebraucht (aiba-Video ist öffentlich).
+
+## Darstellung „Editorial“ (Details aus 11/2026)
+
 
 - Gestaltung 1:1 aus Figma „CV 2026“, Seite „Website editorial“ (Theme-Modus Editorial, Responsive 390/1280). Schriften Instrument Serif und Geist liegen lokal in `fonts/` (SIL OFL).
 - Startseite: Die Editorial-Fassung steht in `index.html` als `<template id="editorial-start">` und wird von `js/editorial.js` eingesetzt.

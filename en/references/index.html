@@ -3,22 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Protected area – Marc Schappach</title>
+  <title>Work – Marc Schappach</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
   <link rel="alternate" hreflang="de" href="../../referenzen/">
   <link rel="alternate" hreflang="en" href="./">
-  <link rel="stylesheet" href="../../css/tokens.css?v=20261123">
-  <link rel="stylesheet" href="../../css/site.css?v=20261123">
+  <link rel="stylesheet" href="../../css/tokens.css?v=20261124">
+  <link rel="stylesheet" href="../../css/site.css?v=20261124">
+  <link rel="stylesheet" href="../../css/editorial.css?v=20261124">
 
-  <!-- Gespeicherte Theme-Wahl vor dem ersten Rendern setzen (kein Flackern) -->
   <script>
-    try {
-      var t = localStorage.getItem("theme");
-      if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
-    } catch (e) {}
+    /* Darstellung (Standard Editorial) und Hell/Dunkel vor dem ersten Rendern setzen – kein Flackern */
+    (function () {
+      var d = document.documentElement, v = null, m = null;
+      try {
+        v = localStorage.getItem("view"); m = localStorage.getItem("mode");
+        var t = localStorage.getItem("theme"); // Einstellung bis 11/2026
+        if (!v && t === "editorial") v = "editorial";
+        if (!m && (t === "light" || t === "dark")) m = t;
+      } catch (e) {}
+      if (v !== "bento") d.setAttribute("data-view", "editorial");
+      if (m === "light" || m === "dark") d.setAttribute("data-theme", m);
+    })();
   </script>
 </head>
 <body>
@@ -26,23 +34,23 @@
 
   <div class="page page--gate">
     <div class="topbar">
-      <a class="theme-toggle" id="lang-toggle" href="../../referenzen/" hreflang="de" aria-label="Language: EN – Auf Deutsch wechseln">Language: EN</a>
-      <button class="theme-toggle" id="theme-toggle" type="button">Theme: Auto</button>
+      <nav class="theme-switch lang-switch" aria-label="Language · Sprache"><a id="lang-toggle" href="../../referenzen/" hreflang="de" lang="de">Deutsch</a><a href="./" hreflang="en" lang="en" aria-current="true">English</a></nav>
+      <button class="theme-toggle" id="theme-toggle" type="button">Display</button>
     </div>
 
     <main id="inhalt" class="grid">
       <section class="tile tile--surface gate" id="gate" aria-labelledby="gate-titel">
-        <p class="label">Protected area</p>
-        <h1 class="heading" id="gate-titel">References</h1>
-        <p class="body gate__copy">The link in my application opens this area automatically. No link? Just ask me for access.</p>
+        <p class="label">Work 02–07</p>
+        <h1 class="heading" id="gate-titel">More work</h1>
+        <p class="body gate__copy">Further work in logistics and crisis communication is available on request. Your invitation link takes you straight in.</p>
 
-        <form id="gate-form" data-src="content.enc" data-keys="../../zugang.json" novalidate>
+        <form id="gate-form" data-src="content.enc" data-keys="../../zugang.json" data-media="../../referenzen/medien/" novalidate>
           <div class="field">
             <label class="field__label" for="code">Access code</label>
             <input class="field__input" id="code" name="code" type="text"
                    autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"
                    aria-describedby="code-hint code-error">
-            <p class="field__hint" id="code-hint">You’ll find it in my application. Upper and lower case don’t matter.</p>
+            <p class="field__hint" id="code-hint">It is in your invitation. Upper and lower case do not matter.</p>
             <p class="field__error" id="code-error" role="alert" hidden>
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
                 <circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5"/>
@@ -51,24 +59,26 @@
               <span id="code-error-text"></span>
             </p>
           </div>
-          <button class="button" id="gate-submit" type="submit" aria-disabled="false">Open area →</button>
+          <button class="button" id="gate-submit" type="submit" aria-disabled="false">Open →</button>
         </form>
         <p class="label" id="gate-status" role="status" aria-live="polite"></p>
-        <p class="gate__request"><a class="js-mail" data-u="marc" data-d="newneed.de" data-subject="Access to your references" href="../#contact">Request access by email →</a></p>
+        <p class="gate__request"><a class="js-mail" data-u="marc" data-d="newneed.de" data-subject="Access to your references" href="../#contact">Request access →</a></p>
       </section>
     </main>
   </div>
 
   <nav class="nav" aria-label="Main navigation">
     <a href="../">Home</a>
-    <a class="nav__desktop" href="../#how-i-work">How I work</a>
-    <a class="nav__desktop" href="../#approach">Approach</a>
-    <a href="./" aria-current="page">References</a>
+    <a href="./" aria-current="page">Work</a>
     <a href="../#contact">Contact</a>
   </nav>
 
-  <script src="../../js/theme.js?v=20261123"></script>
-  <script src="../../js/site.js?v=20261123"></script>
-  <script src="../../js/gate.js?v=20261123"></script>
+  <template id="arbeit-oeffentlich">
+    <main class="e-main e-ref" id="inhalt"><header class="e-title"><div class="e-kennung"><p class="e-meta e-meta--accent">Work 01 · Banking</p><p class="e-meta">Own project, 2024</p></div><h1 class="e-display" id="titel"><span>Banking that</span> <span class="e-it">answers questions.</span></h1><div class="e-kurz"><p class="e-lead">aiba – an AI assistant for mobile banking</p><p class="e-small e-muted">I designed aiba in 2024, when chat in banking apps was still a promise. Today exactly this is on the roadmaps of banks. It combines what I built for DKB, Atruvia and other banks over nine years: voice control, chat assistants and secure payments.</p></div></header><section aria-labelledby="blick" class="e-sec e-sec--tight e-stack"><h2 class="e-label" id="blick">At a glance</h2><div class="e-kpis"><div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">9</span><span aria-hidden="true" data-count="">9</span></p><p class="e-kpi__text">years designing for banks</p></div><div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">8</span><span aria-hidden="true" data-count="">8</span></p><p class="e-kpi__text">banks, from direct bank to private bank</p></div><div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">2</span><span aria-hidden="true" data-count="">2</span></p><p class="e-kpi__text">steps to a transfer</p></div></div></section><div class="e-sec e-sec--tight"><figure class="e-fig"><img alt="Two smartphones showing the banking app aiba: on the left the AI assistant (“Hello Marc, how can I help you?”), on the right the home screen with total balance, account, savings and securities" height="787" src="../../img/arbeiten/aiba-00.webp" width="1152"/><figcaption class="e-caption">01 · aiba · An AI assistant for mobile banking</figcaption></figure></div><section aria-label="Project facts" class="e-sec"><dl class="e-facts"><div><dt>Year</dt><dd>2024</dd></div><div><dt>Platform</dt><dd>iOS</dd></div><div><dt>Services</dt><dd>Concept, UX, UI, prototype</dd></div></dl></section><section aria-labelledby="s01" class="e-sec e-stack"><h2 class="e-mark" id="s01">01 / Context</h2><p class="e-heading">From account data to answers.</p><div class="e-cols"><div class="e-col"><h3>Problem</h3><p class="e-body">Banking apps show transactions, but the analysis is left to the customer: filter, scroll, calculate.</p></div><div class="e-col"><h3>Goal</h3><p class="e-body">An app that answers questions about your money and acts on them.</p></div><div class="e-col"><h3>Origin</h3><p class="e-body">It started with KIU, Atruvia's AI chat assistant, where I worked on the first studies. When ChatGPT showed what was possible, I carried the idea forward in my own study – the rest of the app is built around this assistant. It also draws on DKB's Siri integration and intent training for Alexa and Siri.</p></div></div></section><section aria-labelledby="s02" class="e-sec e-stack e-stack--block"><h2 class="e-mark" id="s02">02 / Approach</h2><div class="e-step"><div class="e-step__head"><p class="e-step__label">Step 1</p><div class="e-step__row"><h3 class="e-step__title">Ask instead of search</h3><p class="e-body">One question is enough, spoken or typed. aiba gives the total, lists the items and saves the report as a PDF.</p></div></div><figure class="e-fig"><div class="e-stage e-stage--sequence"><video aria-label="Animation: voice question, answer with the total, line items and PDF export" class="e-video e-video--phone" data-src="../../media/aiba-voice-loop.mp4" height="1686" loop="" muted="" playsinline="" poster="../../media/aiba-voice-poster.webp" preload="none" width="778"></video><ol aria-label="Sequence in the video" class="e-sequence"><li><span class="e-sequence__num">01</span><span class="e-sequence__text"><span class="e-sequence__title">Ask by voice</span><span class="e-sequence__desc">The question is spoken instead of typed – the assistant listens and transcribes live.</span></span></li><li><span class="e-sequence__num">02</span><span class="e-sequence__text"><span class="e-sequence__title">Answer with the total</span><span class="e-sequence__desc">The amount appears right away, with suggested follow-up questions.</span></span></li><li><span class="e-sequence__num">03</span><span class="e-sequence__text"><span class="e-sequence__title">Details on request</span><span class="e-sequence__desc">A tap on “List details” shows the line items.</span></span></li><li><span class="e-sequence__num">04</span><span class="e-sequence__text"><span class="e-sequence__title">Save as PDF</span><span class="e-sequence__desc">“Yes” is enough – the report is ready to download as a PDF.</span></span></li></ol></div><figcaption class="e-caption">02 · Ask instead of search · Voice question, answer, line items, PDF</figcaption></figure></div><div class="e-step"><div class="e-step__head"><p class="e-step__label">Step 2</p><div class="e-step__row"><h3 class="e-step__title">Pay in two steps</h3><p class="e-body">Recipient, amount, done. A swipe confirms the payment, so nothing goes out by accident.</p></div></div><figure class="e-fig"><div class="e-stage e-stage--phones"><img alt="Choose amount: quick amounts from €10 to €150 for Kaylynn Baccaro" height="548" loading="lazy" src="../../img/arbeiten/aiba-05.webp" style="--w:240px" width="262"/><img alt="Payment summary with recipient and EUR 100.00, message and picture still empty" height="548" loading="lazy" src="../../img/arbeiten/aiba-06.webp" style="--w:240px" width="262"/><img alt="Payment summary with an added photo and the “Confirm payment” button" height="548" loading="lazy" src="../../img/arbeiten/aiba-07.webp" style="--w:240px" width="262"/><img alt="Writing a message: “Thanks a lot!” with the keyboard open" height="548" loading="lazy" src="../../img/arbeiten/aiba-08.webp" style="--w:240px" width="262"/></div><figcaption class="e-caption">03 · Pay in two steps · Recipient, amount, swipe to confirm</figcaption></figure></div><div class="e-step"><div class="e-step__head"><p class="e-step__label">Step 3</p><div class="e-step__row"><h3 class="e-step__title">All accounts in one place</h3><p class="e-body">Current account, savings and portfolio in one balance, all cards in one wallet.</p></div></div></div></section><section aria-labelledby="s03" class="e-sec e-stack"><h2 class="e-mark" id="s03">03 / Result</h2><div class="e-step"><div class="e-step__head"><div class="e-step__row"><h3 class="e-step__title">Ahead of its time – from 2024 to today.</h3><p class="e-body">What was a concept in 2024 is now on the roadmap of many banks. aiba shows how voice, chat and payments come together in one interface – without security getting in the way.</p></div></div><figure class="e-fig"><div class="e-stage"><ul class="e-logos"><li><img alt="Aareal Bank" height="30" loading="lazy" src="../../img/arbeiten/aiba-09.webp" width="134"/></li><li><img alt="Aargauische Kantonalbank" height="40" loading="lazy" src="../../img/arbeiten/aiba-10.webp" width="202"/></li><li><img alt="apoBank" height="53" loading="lazy" src="../../img/arbeiten/aiba-11.webp" width="144"/></li><li><img alt="DKB – Deutsche Kreditbank" height="47" loading="lazy" src="../../img/arbeiten/aiba-12.webp" width="93"/></li><li><img alt="Donner &amp; Reuschel" height="68" loading="lazy" src="../../img/arbeiten/aiba-13.webp" width="179"/></li><li><img alt="DZ Privatbank" height="18" loading="lazy" src="../../img/arbeiten/aiba-14.webp" width="216"/></li><li><img alt="Fidor Bank" height="48" loading="lazy" src="../../img/arbeiten/aiba-15.webp" width="118"/></li><li><img alt="Volksbanken Raiffeisenbanken" height="39" loading="lazy" src="../../img/arbeiten/aiba-16.webp" width="238"/></li></ul></div><figcaption class="e-caption">04 · Banks I have worked for</figcaption></figure></div></section><nav aria-label="Browse the work" class="e-pager"><span></span><a href="#work-02" rel="next"><span class="e-caption">Next</span><span class="e-pager__title">Work 02 <span aria-hidden="true" class="e-arrow">→</span><br/>Design system</span></a></nav></main>
+  </template>
+  <script src="../../js/theme.js?v=20261124"></script>
+  <script src="../../js/site.js?v=20261124"></script>
+  <script src="../../js/editorial.js?v=20261124"></script>
+  <script src="../../js/gate.js?v=20261124"></script>
 </body>
 </html>

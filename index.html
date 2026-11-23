@@ -12,21 +12,32 @@
   <link rel="alternate" hreflang="de" href="./">
   <link rel="alternate" hreflang="en" href="en/">
   <link rel="preload" href="fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/tokens.css?v=20261123">
-  <link rel="stylesheet" href="css/site.css?v=20261123">
-  <link rel="stylesheet" href="css/start.css?v=20261123">
-  <link rel="stylesheet" href="css/editorial.css?v=20261123">
-  <style>[data-theme="editorial"] .page--start > main:not(.e-main) { visibility: hidden; }</style>
+  <link rel="stylesheet" href="css/tokens.css?v=20261124">
+  <link rel="stylesheet" href="css/site.css?v=20261124">
+  <link rel="stylesheet" href="css/start.css?v=20261124">
+  <link rel="stylesheet" href="css/editorial.css?v=20261124">
+  <style>[data-view="editorial"] .page--start > main:not(.e-main) { visibility: hidden; }</style>
   <script>
-    try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark" || t === "editorial") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+    /* Darstellung (Standard Editorial) und Hell/Dunkel vor dem ersten Rendern setzen – kein Flackern */
+    (function () {
+      var d = document.documentElement, v = null, m = null;
+      try {
+        v = localStorage.getItem("view"); m = localStorage.getItem("mode");
+        var t = localStorage.getItem("theme"); // Einstellung bis 11/2026
+        if (!v && t === "editorial") v = "editorial";
+        if (!m && (t === "light" || t === "dark")) m = t;
+      } catch (e) {}
+      if (v !== "bento") d.setAttribute("data-view", "editorial");
+      if (m === "light" || m === "dark") d.setAttribute("data-theme", m);
+    })();
   </script>
 </head>
 <body>
   <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
   <div class="page page--start">
     <div class="topbar">
-      <a class="theme-toggle" id="lang-toggle" href="en/" hreflang="en" aria-label="Sprache: DE – Switch to English">Sprache: DE</a>
-      <button class="theme-toggle" id="theme-toggle" type="button">Darstellung: Automatisch</button>
+      <nav class="theme-switch lang-switch" aria-label="Sprache · Language"><a href="./" hreflang="de" lang="de" aria-current="true">Deutsch</a><a id="lang-toggle" href="en/" hreflang="en" lang="en">English</a></nav>
+      <button class="theme-toggle" id="theme-toggle" type="button">Darstellung</button>
     </div>
 
     <main id="inhalt">
@@ -152,58 +163,45 @@
   </div>
   <nav class="nav" aria-label="Hauptnavigation">
     <a href="./" aria-current="page">Start</a>
-    <a class="nav__desktop" href="./#arbeitsweise">Arbeitsweise</a>
-    <a class="nav__desktop" href="./#ansatz">Ansatz</a>
-    <a href="referenzen/">Referenzen</a>
+    <a href="./referenzen/">Arbeiten</a>
     <a href="./#kontakt">Kontakt</a>
   </nav>
   <template id="editorial-start">
     <main id="inhalt" class="e-main">
       <section class="e-hero e-sec" aria-labelledby="titel">
         <div class="e-hero__text">
-          <p class="e-meta e-meta--accent">UX/UI Design · München</p>
-          <h1 class="e-display" id="titel"><span>Design, das</span> <span class="e-it">früh funktioniert.</span></h1>
-          <p class="e-lead e-measure">Design Lead für komplexe B2B-Produkte. Ich verbinde Design Systems, automatisierte Flows und funktionale Prototypen, damit Teams früher testen und sicherer entscheiden.</p>
+          <p class="e-meta e-meta--accent">Marc Schappach · Digital- und Produktdesign · München</p>
+          <h1 class="e-display" id="titel"><span>Komplexe Produkte,</span> <span class="e-it">klar gestaltet.</span></h1>
+          <p class="e-lead e-measure">Ich bin Marc Schappach. Seit über 15 Jahren gestalte ich digitale Produkte für Banken, Logistik und Krisenkommunikation – von der ersten Idee bis zum System, mit dem Teams jeden Tag arbeiten.</p>
+          <div class="e-actions"><a class="e-button" href="referenzen/">Arbeiten ansehen</a><a class="e-link" href="#kontakt">Kontakt aufnehmen</a></div>
+          <p class="e-brands">Marken, für die ich gearbeitet habe: DKB, Atruvia, Volksbanken Raiffeisenbanken, apoBank, Aareal Bank, DZ Privatbank, Donner &amp; Reuschel, Aargauische Kantonalbank, Fidor Bank – dazu ein weltweiter Logistikkonzern und ein Softwarehaus für Krisenkommunikation.</p>
         </div>
-        <figure class="e-hero__photo">
-          <img src="img/marc-schappach.jpg" width="373" height="440" alt="Porträt von Marc Schappach">
-        </figure>
+        <figure class="e-hero__photo"><img src="img/marc-schappach.jpg" width="373" height="440" alt="Porträt von Marc Schappach"></figure>
       </section>
-
-      <section class="e-sec e-stack" id="arbeitsweise" aria-labelledby="arbeitsweise-titel">
-        <h2 class="e-mark" id="arbeitsweise-titel">01 / Arbeitsweise</h2>
-        <p class="e-heading">Vom Entwurf zum lauffähigen Prototyp – in einem Zug.</p>
-        <div class="e-cols">
-          <div class="e-tool"><img src="img/tool-figma.svg" width="56" height="56" alt=""><div class="e-col"><h3>Figma · Design System</h3><p class="e-body">Tokens, Komponenten und Code Connect als Single Source of Truth. Automatisierte Flows und frühe Testskripte sichern die Qualität, eine strukturierte Doku macht das System für KI-Agenten lesbar.</p></div></div>
-          <div class="e-tool"><img src="img/tool-claude.svg" width="56" height="56" alt=""><div class="e-col"><h3>Claude · Denken &amp; Bauen</h3><p class="e-body">Kuratierte Markdown-Kontexte mit Regeln und Prompt-Vorlagen binden Claude in den Prozess ein – für Konzepte, Texte und Code im Rahmen des Design Systems.</p></div></div>
-          <div class="e-tool"><img src="img/tool-lovable.svg" width="56" height="56" alt=""><div class="e-col"><h3>Lovable · Erlebbar machen</h3><p class="e-body">Funktionale Prototypen mit generierten Testdaten und realistischen Szenarien. Ideen werden validiert, bevor sie in die Entwicklung gehen.</p></div></div>
-        </div>
-        <p class="e-quote">Design bleibt die Entscheidung. KI und Automatisierung verkürzen den Weg dorthin.</p>
+      <section class="e-sec e-stack" id="leistungen" aria-labelledby="leistungen-titel">
+        <h2 class="e-mark" id="leistungen-titel">01 / Leistungen</h2>
+        <p class="e-heading">Was ich für Sie gestalte.</p>
+        <p class="e-lead e-intro">Ich schaffe Mehrwert durch Design – für die Menschen, die ein Produkt nutzen, und für das Unternehmen dahinter.</p>
+        <div class="e-cols e-cols--4"><div class="e-col"><h3>Produktdesign &amp; UX</h3><p class="e-body">Ich mache komplexe Abläufe einfach – Produkte werden schneller verstanden und lieber genutzt.</p></div><div class="e-col"><h3>Agentic Design Systems</h3><p class="e-body">Design Systems, die geschätzt und genutzt werden: gemeinsam entwickelt mit den späteren Anwendern, mit Entwicklern und mit KI-Agenten. Komponenten, Code und Regeln sind so beschrieben, dass Agenten direkt damit bauen.</p></div><div class="e-col"><h3>Funktionale Prototypen &amp; Apps</h3><p class="e-body">Vollfunktionsfähige Prototypen und eigenständige Apps statt Klickstrecken. Aus ihnen entstehen automatisch Spezifikationen für die Dev-Pipeline – und Kundentests zeigen echtes Verhalten statt Vermutungen.</p></div><div class="e-col"><h3>Barrierefreiheit</h3><p class="e-body">WCAG AA als Standard – geprüft im Entwurf, nicht erst im Audit.</p></div></div>
       </section>
-
-      <section class="e-sec e-stack" id="ansatz" aria-labelledby="ansatz-titel">
-        <h2 class="e-mark" id="ansatz-titel">02 / Ansatz</h2>
-        <p class="e-heading">Methodisch vom Problem zur skalierbaren Lösung.</p>
-        <div class="e-step__head"><p class="e-step__label">Verstehen</p><div class="e-step__row"><h3 class="e-step__title">Kontext vor Oberfläche.</h3><p class="e-body">Stakeholder-Interviews, Kontextanalysen und Journey Mapping klären, wer das Produkt unter welchen Bedingungen nutzt. Daraus entstehen priorisierte Anforderungen statt Annahmen.</p></div></div>
-        <div class="e-step__head"><p class="e-step__label">Validieren</p><div class="e-step__row"><h3 class="e-step__title">Prototypen statt Präsentationen.</h3><p class="e-body">Funktionale Prototypen machen Szenarien früh testbar. Usability-Tests in kurzen Iterationszyklen liefern belastbare Erkenntnisse, bevor Entwicklungsaufwand entsteht.</p></div></div>
-        <div class="e-step__head"><p class="e-step__label">Skalieren</p><div class="e-step__row"><h3 class="e-step__title">Systeme, die tragen.</h3><p class="e-body">Design Systems mit Tokens, definierten Zuständen und Code-Bezug sichern Konsistenz über Produkte, Plattformen und Teams.</p></div></div>
-        <div class="e-step__head"><p class="e-step__label">Barrierefreiheit</p><div class="e-step__row"><h3 class="e-step__title">WCAG AA als Mindeststandard.</h3><p class="e-body">Regelmäßige A11y-Audits und die zugehörige Zertifizierung prägen meine Arbeit. KI-gestützte Skripte und Markdown-Regeln prüfen Kontraste, Fokusführung und Struktur schon im Entwurf – nicht erst im Audit.</p></div></div>
-        <div class="e-step__head"><p class="e-step__label">Zusammenarbeit</p><div class="e-step__row"><h3 class="e-step__title">Nah an Produkt und Vertrieb.</h3><p class="e-body">Design als Entscheidungsgrundlage für Produktmanagement, Entwicklung und Vertrieb – mit messbaren Zielen statt Geschmacksfragen.</p></div></div>
+      <section class="e-sec e-stack" id="vorgehen" aria-labelledby="vorgehen-titel">
+        <h2 class="e-mark" id="vorgehen-titel">02 / Vorgehen</h2>
+        <p class="e-heading">Vier Schritte, keine Umwege.</p>
+        <div class="e-step__head"><p class="e-step__label e-step__num">01</p><div class="e-step__row"><h3 class="e-step__title">Wert klären</h3><p class="e-body">Welchen Mehrwert soll das Produkt schaffen, welches Problem löst es, und was ist es den Kunden wert? Gestaltet wird, wenn das klar ist.</p></div></div><div class="e-step__head"><p class="e-step__label e-step__num">02</p><div class="e-step__row"><h3 class="e-step__title">Prototypen</h3><p class="e-body">Ideen werden in Tagen klickbar, mit realistischen Daten.</p></div></div><div class="e-step__head"><p class="e-step__label e-step__num">03</p><div class="e-step__row"><h3 class="e-step__title">Testen</h3><p class="e-body">Kurze Testrunden liefern Belege statt Meinungen.</p></div></div><div class="e-step__head"><p class="e-step__label e-step__num">04</p><div class="e-step__row"><h3 class="e-step__title">Skalieren</h3><p class="e-body">Was funktioniert, geht ins System und trägt über alle Produkte.</p></div></div>
       </section>
-
       <section class="e-sec e-stack" id="wirkung" aria-labelledby="wirkung-titel">
         <h2 class="e-mark" id="wirkung-titel">03 / Wirkung</h2>
-        <p class="e-heading">UX-Design auf Basis von KPIs und OKRs.</p>
-        <div class="e-kpis">
-          <div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">+10 %</span><span aria-hidden="true" data-count>+10&nbsp;%</span></p><p class="e-kpi__text">MRR gestiegen, Jahresziel erreicht · Alerting und Krisenmanagement</p></div>
-          <div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">+20 %</span><span aria-hidden="true" data-count>+20&nbsp;%</span></p><p class="e-kpi__text">Angebotsanfragen · B2B-Logistik</p></div>
-          <div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">−70 %</span><span aria-hidden="true" data-count>−70&nbsp;%</span></p><p class="e-kpi__text">Aufwand für Design-Anpassungen · Banking Design System</p></div>
-        </div>
+        <p class="e-heading">Gestaltung, die man messen kann.</p>
+        <div class="e-kpis e-kpis--4"><div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">+20 %</span><span aria-hidden="true" data-count>+20&nbsp;%</span></p><p class="e-kpi__text">mehr Angebotsanfragen nach dem Redesign eines B2B-Logistikportals</p></div><div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">+10 %</span><span aria-hidden="true" data-count>+10&nbsp;%</span></p><p class="e-kpi__text">Monatsumsatz (MRR), Jahresziel erreicht – Software für Krisenkommunikation</p></div><div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">−70 %</span><span aria-hidden="true" data-count>−70&nbsp;%</span></p><p class="e-kpi__text">Time to Market: Die Banking-Plattform war in knapp 1 statt 3 Monaten an eine neue Bank angepasst – dank eines Design Systems, das 80 % der Produktfamilie und der Entwicklungsteams nutzten</p></div><div class="e-kpi"><p class="e-kpi__value"><span class="e-sr">+42 %</span><span aria-hidden="true" data-count>+42&nbsp;%</span></p><p class="e-kpi__text">Kunden der DKB von 2014 bis 2019 – Banking-App der zweitgrößten Direktbank Deutschlands</p></div></div>
       </section>
-
+      <section class="e-sec e-stack" id="erfahrung" aria-labelledby="erfahrung-titel">
+        <h2 class="e-mark" id="erfahrung-titel">04 / Erfahrung</h2>
+        <p class="e-heading">Auf der Höhe der Zeit.</p>
+        <p class="e-lead e-intro">Ich bilde Designerinnen und Designer aus, mit Ausbildereignung nach IHK, und bin in Münchens UX-, Produkt- und KI-Szene aktiv. So arbeite ich mit dem, was heute zählt: KI-Agenten, funktionale Prototypen, Design Systems im Code.</p>
+      </section>
       <section class="e-sec e-takeaway" id="kontakt" aria-labelledby="kontakt-titel">
-        <p class="e-label">04 / Kontakt</p>
-        <h2 class="e-quote" id="kontakt-titel">Lust auf ein Gespräch über Ihr nächstes Produkt?</h2>
+        <p class="e-label">05 / Kontakt</p>
+        <h2 class="e-quote" id="kontakt-titel">Ein neues Produkt oder ein System, das wachsen soll? Erzählen Sie mir davon.</h2>
         <div class="e-actions">
           <a class="e-button js-mail" data-u="marc" data-d="newneed.de" href="impressum.html">E-Mail schreiben</a>
           <a class="e-link" href="https://www.linkedin.com/in/marc-schappach-b1103526/" rel="noopener">LinkedIn ↗</a>
@@ -211,8 +209,8 @@
       </section>
     </main>
   </template>
-  <script src="js/theme.js?v=20261123"></script>
-  <script src="js/site.js?v=20261123"></script>
-  <script src="js/editorial.js?v=20261123"></script>
+  <script src="js/theme.js?v=20261124"></script>
+  <script src="js/site.js?v=20261124"></script>
+  <script src="js/editorial.js?v=20261124"></script>
 </body>
 </html>

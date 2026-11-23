@@ -9,7 +9,7 @@
   var en = (root.lang || "de").slice(0, 2) === "en";
   var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-  function isEditorial() { return !en && root.getAttribute("data-theme") === "editorial"; }
+  function isEditorial() { return root.getAttribute("data-view") === "editorial"; }
 
   /* ---------- Hochzählen ---------- */
   var DURATION = 900;
@@ -74,6 +74,9 @@
       Array.prototype.forEach.call(fig.querySelectorAll(".e-stage img"), function (img, k) {
         img.style.setProperty("--i", k);
       });
+      Array.prototype.forEach.call(fig.querySelectorAll(".e-sequence li"), function (li, k) {
+        li.style.setProperty("--i", k);
+      });
       fig.classList.add("e-rise");
       io.observe(fig);
     });
@@ -111,7 +114,7 @@
       if (!brand) {
         brand = document.createElement("span");
         brand.className = "nav__brand";
-        brand.textContent = "Marc Schappach · Portfolio";
+        brand.textContent = "Marc Schappach";
       }
       if (brand.parentNode !== nav) nav.insertBefore(brand, nav.firstChild);
       if (nav.previousElementSibling !== topbar) topbar.insertAdjacentElement("afterend", nav);
@@ -150,7 +153,12 @@
   }
 
   window.Editorial = { enhance: enhance, isEditorial: isEditorial };
-  document.addEventListener("themechange", apply);
+  var lastView = isEditorial();
+  document.addEventListener("themechange", function () {
+    if (isEditorial() === lastView) return; // nur Hell/Dunkel gewechselt
+    lastView = isEditorial();
+    apply();
+  });
   apply();
   // Anker der Startseite (#ansatz …) nach dem Tausch erneut anspringen
   if (tpl && isEditorial() && location.hash) {

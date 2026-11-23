@@ -567,3 +567,34 @@ h1[tabindex="-1"]:focus { outline: none; }
 }
 /* Schalterleiste liegt über den Deko-Kreisen der Startseite */
 .topbar { position: relative; z-index: 2; }
+
+/* ---------- Schalterleiste (Release 24.11.2026) ----------
+   Links: Sprache als zwei Links (Deutsch · English). Rechts: Darstellung (Bento · Editorial)
+   und ein Knopf Hell/Dunkel (Sonne = hell, Mond = dunkel; Klick wechselt). */
+.topbar__end { display: inline-flex; align-items: center; gap: 4px; }
+.theme-switch a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+}
+.theme-switch a:hover { box-shadow: inset 0 0 0 2px var(--color-text-primary); color: var(--color-text-primary); }
+.theme-switch a[aria-current] { background: var(--color-bg-surface); color: var(--color-text-primary); }
+.mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+.mode-toggle:hover { box-shadow: inset 0 0 0 2px var(--color-text-primary); }
+.mode-toggle svg { width: 18px; height: 18px; }

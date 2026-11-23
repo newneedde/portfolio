@@ -1,4 +1,4 @@
-/* Sprachschalter DE ↔ EN und E-Mail-Adresse (vor einfachen Crawlern geschützt).
+/* Sprachschalter DE ↔ EN (Link „English“ bzw. „Deutsch“ mit id="lang-toggle") und E-Mail-Adresse (vor einfachen Crawlern geschützt).
    Der Schalter ist ein normaler Link auf die Gegenseite (funktioniert auch ohne JS);
    beim Klick wird der aktuelle Anker (#arbeitsweise, #referenz-02 …) mitübersetzt. */
 (function () {
@@ -6,9 +6,12 @@
   if (toggle) {
     // Anker-Paare: deutsch ↔ englisch
     var pairs = [
+      ["leistungen", "services"],
+      ["vorgehen", "approach"],
       ["arbeitsweise", "how-i-work"],
       ["ansatz", "approach"],
       ["wirkung", "impact"],
+      ["erfahrung", "experience"],
       ["kontakt", "contact"],
       ["inhalt", "inhalt"],
       ["referenz-01", "reference-01"],
@@ -17,7 +20,14 @@
       ["referenz-04", "reference-04"],
       ["referenz-05", "reference-05"],
       ["referenz-06", "reference-06"],
-      ["referenz-07", "reference-07"]
+      ["referenz-07", "reference-07"],
+      ["arbeit-01", "work-01"],
+      ["arbeit-02", "work-02"],
+      ["arbeit-03", "work-03"],
+      ["arbeit-04", "work-04"],
+      ["arbeit-05", "work-05"],
+      ["arbeit-06", "work-06"],
+      ["arbeit-07", "work-07"]
     ];
     var toEn = (toggle.getAttribute("hreflang") || "") === "en";
     toggle.addEventListener("click", function () {

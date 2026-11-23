@@ -14,7 +14,13 @@
    Videos: <video data-media="media-05"> im Referenzinhalt. Die Datei liegt verschlüsselt in
    medien/media-05.bin (12 Byte IV + AES-GCM-Chiffretext, Schlüssel = derselbe wie für inhalt.enc).
    Sie wird erst geladen, wenn das Video in die Nähe des sichtbaren Bereichs kommt, und spielt nur,
-   solange es sichtbar ist. Bei „Bewegung reduzieren“ bleibt das Poster stehen (Abspielen per Steuerung). */
+   solange es sichtbar ist. Bei „Bewegung reduzieren“ bleibt das Poster stehen (Abspielen per Steuerung).
+   Öffentliche Videos (<video data-src="…mp4">) werden genauso nachgeladen, nur ohne Entschlüsselung.
+
+   Darstellung Editorial (Stand 11/2026): „Arbeiten“ 01–07 in neuer Reihenfolge.
+   – #arbeit-01 (EN #work-01) ist öffentlich: <template id="arbeit-oeffentlich"> auf dieser Seite.
+   – #arbeit-02 … 07 liegen verschlüsselt in data.works; ohne Code erscheint an ihrer Stelle die Zugangsmaske.
+   Darstellung Bento: unverändert Referenz 01–07 aus data.pages hinter der Maske. */
 (function () {
   var form = document.getElementById("gate-form");
   var input = document.getElementById("code");
@@ -31,7 +37,7 @@
 
   var en = (document.documentElement.lang || "de").slice(0, 2) === "en";
   var T = en ? {
-    checking: "Opening references …",
+    checking: "Opening the work …",
     https: "This area needs a secure connection (https). Please open the page via its web address.",
     empty: "Please enter the access code.",
     load: "The content could not be loaded. Please try again later.",
@@ -39,7 +45,7 @@
     link: "This link is no longer valid. Please request access – I'll gladly send you a new one.",
     nav: "References"
   } : {
-    checking: "Referenzen werden geöffnet …",
+    checking: "Arbeiten werden geöffnet …",
     https: "Dieser Bereich braucht eine sichere Verbindung (https). Bitte die Seite über die Webadresse öffnen.",
     empty: "Bitte den Zugangscode eingeben.",
     load: "Der Inhalt konnte nicht geladen werden. Bitte später erneut versuchen.",
@@ -183,13 +189,15 @@
   function setupVideos(scope) {
     videoObservers.forEach(function (o) { o.disconnect(); });
     videoObservers = [];
-    var videos = scope.querySelectorAll("video[data-media]");
-    if (!videos.length || !unlocked) return;
+    var videos = scope.querySelectorAll("video[data-media], video[data-src]");
+    if (!videos.length) return;
     function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
     function load(v) {
       if (v.getAttribute("data-loaded")) return;
       v.setAttribute("data-loaded", "1");
-      mediaUrl(v.getAttribute("data-media")).then(function (url) {
+      var direct = v.getAttribute("data-src");
+      if (!direct && !unlocked) { v.removeAttribute("data-loaded"); return; }
+      (direct ? Promise.resolve(direct) : mediaUrl(v.getAttribute("data-media"))).then(function (url) {
         v.src = url;
         if (v.getAttribute("data-visible") && !reduceMotion) play(v);
       }).catch(function () { v.removeAttribute("data-loaded"); });
@@ -219,20 +227,97 @@
     videoObservers = [near, seen];
   }
 
-  function render(keepPosition) {
-    if (keepPosition && keepPosition.type) keepPosition = true; // Aufruf über Ereignis (themechange)
-    if (keepPosition !== true) keepPosition = false;
-    var id = pageId();
-    var pg = data.pages[id];
-    var editorial = useEditorial(pg);
-    // Beim Wechsel der Darstellung an ungefähr derselben Stelle bleiben (Layouts sind unterschiedlich lang)
+  /* ---------- Arbeiten (Editorial) ---------- */
+  var WORKS = en
+    ? { prefix: "work", nav: "Work", names: ["Banking", "Design system", "Chat and video", "Basic alert", "Alerting", "Logistics", "Mini Figure Out"], suffix: " – Marc Schappach" }
+    : { prefix: "arbeit", nav: "Arbeiten", names: ["Banking", "Design System", "Chat und Video", "Basisalarm", "Alarmierung", "Logistik", "Mini Figure Out"], suffix: " – Marc Schappach" };
+  var BENTO_OF = [6, 1, 2, 3, 4, 5, 7]; // Arbeit n (1–7) → Bento-Referenz
+  var BENTO = en ? "reference" : "referenz";
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function workNum(h) {
+    var m = /^(arbeit|work)-0?(\d)$/.exec(h || ""); if (m) return +m[2];
+    m = /^(referenz|reference)-0?(\d)$/.exec(h || ""); if (m) return BENTO_OF.indexOf(+m[2]) + 1 || 1;
+    return 1;
+  }
+  function bentoNum(h) {
+    var m = /^(referenz|reference)-0?(\d)$/.exec(h || ""); if (m) return +m[2];
+    m = /^(arbeit|work)-0?(\d)$/.exec(h || ""); if (m) return BENTO_OF[+m[2] - 1];
+    return null;
+  }
+  function workNav(active) {
+    var nav = document.createElement("nav");
+    nav.className = "ref-nav c-full";
+    nav.setAttribute("aria-label", WORKS.nav);
+    var list = document.createElement("ul");
+    WORKS.names.forEach(function (name, i) {
+      var li = document.createElement("li"), a = document.createElement("a");
+      a.href = "#" + WORKS.prefix + "-" + pad(i + 1);
+      var num = document.createElement("span");
+      num.className = "ref-nav__num";
+      num.textContent = pad(i + 1);
+      a.appendChild(num);
+      a.appendChild(document.createTextNode(name));
+      if (i + 1 === active) a.setAttribute("aria-current", "page");
+      li.appendChild(a); list.appendChild(li);
+    });
+    nav.appendChild(list);
+    return nav;
+  }
+
+  var gateMain = document.getElementById("inhalt"); // Maske (wird bei Bedarf wieder eingesetzt)
+  var gateTitle = document.title;
+  var lastView = null;
+
+  function place(next, keepPosition, title, editorial) {
     var docEl = document.documentElement;
     var ratio = keepPosition ? window.scrollY / Math.max(1, docEl.scrollHeight - window.innerHeight) : 0;
-    var tpl = document.createElement("template");
-    tpl.innerHTML = editorial ? pg.editorial : pg.main;
-    var next = tpl.content.firstElementChild;
-    if (editorial) {
-      var imgs = imagesOf(id);
+    var current = document.getElementById("inhalt");
+    if (current !== next) current.replaceWith(next);
+    page.classList.toggle("page--gate", next === gateMain);
+    if (title) document.title = title;
+    // Gewählter Eintrag in der horizontalen Navigation sichtbar (mittig)
+    var list = next.querySelector(".ref-nav ul");
+    var active = list && list.querySelector('[aria-current="page"]');
+    if (active) {
+      var r = active.getBoundingClientRect(), lr = list.getBoundingClientRect();
+      var left = list.scrollLeft + (r.left - lr.left) - (list.clientWidth - r.width) / 2;
+      var smooth = editorial && !reduceMotion;
+      if (list.scrollTo) list.scrollTo({ left: left, behavior: smooth ? "smooth" : "auto" }); else list.scrollLeft = left;
+    }
+    if (!keepPosition) {
+      var h1 = next.querySelector("h1");
+      if (h1 && next !== gateMain) { h1.setAttribute("tabindex", "-1"); h1.focus({ preventScroll: true }); }
+      window.scrollTo(0, 0);
+    } else {
+      window.scrollTo(0, Math.round(ratio * Math.max(0, docEl.scrollHeight - window.innerHeight)));
+    }
+    if (editorial && window.Editorial) window.Editorial.enhance(next);
+    setupVideos(next);
+  }
+
+  function showGate(active, keepPosition) {
+    var old = gateMain.querySelector(".ref-nav");
+    if (old) old.remove();
+    if (active) gateMain.insertBefore(workNav(active), gateMain.firstChild);
+    place(gateMain, keepPosition, gateTitle, !!active);
+  }
+
+  function fromHtml(html) {
+    var t = document.createElement("template");
+    t.innerHTML = html;
+    return t.content.firstElementChild;
+  }
+
+  function renderWork(n, keepPosition) {
+    var next, title;
+    if (n === 1) {
+      var tpl = document.getElementById("arbeit-oeffentlich");
+      next = tpl.content.firstElementChild.cloneNode(true);
+      title = (en ? "Work 01 · " : "Arbeit 01 · ") + WORKS.names[0] + WORKS.suffix;
+    } else {
+      var w = data.works[WORKS.prefix + "-" + pad(n)];
+      next = fromHtml(w.html);
+      var imgs = imagesOf(w.ref);
       Array.prototype.forEach.call(next.querySelectorAll("img[data-ref]"), function (img) {
         var src = imgs[parseInt(img.getAttribute("data-ref"), 10)];
         if (!src) return;
@@ -241,39 +326,47 @@
           if (!img.hasAttribute(a) && src.hasAttribute(a)) img.setAttribute(a, src.getAttribute(a));
         });
       });
+      title = w.title;
     }
-    next.insertBefore(refNav(id), next.firstChild);
-    var current = document.getElementById("inhalt") || gate.closest("main");
-    current.replaceWith(next);
-    page.classList.remove("page--gate");
-    if (pg.title) document.title = pg.title;
-    // Gewählte Referenz in der horizontalen Navigation sichtbar machen (mittig)
-    var list = next.querySelector(".ref-nav ul");
-    var active = list && list.querySelector('[aria-current="page"]');
-    if (active) {
-      var r = active.getBoundingClientRect(), lr = list.getBoundingClientRect();
-      var left = list.scrollLeft + (r.left - lr.left) - (list.clientWidth - r.width) / 2;
-      var smooth = editorial && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-      if (list.scrollTo) list.scrollTo({ left: left, behavior: smooth ? "smooth" : "auto" }); else list.scrollLeft = left;
-    }
-    var h1 = next.querySelector("h1");
-    if (!keepPosition) {
-      if (h1) { h1.setAttribute("tabindex", "-1"); h1.focus({ preventScroll: true }); }
-      window.scrollTo(0, 0);
-    } else {
-      window.scrollTo(0, Math.round(ratio * Math.max(0, docEl.scrollHeight - window.innerHeight)));
-    }
-    if (editorial) window.Editorial.enhance(next);
-    setupVideos(next);
+    next.insertBefore(workNav(n), next.firstChild);
+    place(next, keepPosition, title, true);
   }
+
+  function renderBento(keepPosition) {
+    var n = bentoNum((location.hash || "").slice(1));
+    var id = n ? BENTO + "-" + pad(n) : data.default;
+    if (!data.pages[id]) id = data.default;
+    var pg = data.pages[id];
+    var next = fromHtml(pg.main);
+    next.insertBefore(refNav(id), next.firstChild);
+    place(next, keepPosition, pg.title, false);
+  }
+
+  function editorialView() { return !!(window.Editorial && window.Editorial.isEditorial()); }
+
+  function route(keepPosition) {
+    keepPosition = keepPosition === true;
+    lastView = editorialView();
+    var h = (location.hash || "").slice(1);
+    if (lastView) {
+      var n = workNum(h);
+      if (n === 1 || (data && data.works && data.works[WORKS.prefix + "-" + pad(n)])) renderWork(n, keepPosition);
+      else showGate(n, keepPosition);
+    } else if (data) {
+      renderBento(keepPosition);
+    } else {
+      showGate(null, keepPosition);
+    }
+  }
+  var render = route;
 
   function show(payload) {
     data = payload;
-    render();
-    window.addEventListener("hashchange", function () { render(false); });
-    // Darstellung gewechselt: dieselbe Referenz in der anderen Fassung zeigen
-    document.addEventListener("themechange", function () { render(true); });
+    route();
   }
+  window.addEventListener("hashchange", function () { route(false); });
+  // Darstellung gewechselt: dieselbe Arbeit in der anderen Fassung zeigen (Hell/Dunkel braucht keinen Neuaufbau)
+  document.addEventListener("themechange", function () { if (editorialView() !== lastView) route(true); });
 
   function fail(msg) {
     errorText.textContent = msg;
@@ -313,7 +406,7 @@
   // 1) Einladungslink: Code steht im Anker (#show-me-more). Seitenanker (#referenz-02) sind keine Codes.
   var hash = "";
   try { hash = decodeURIComponent((location.hash || "").slice(1)); } catch (e) {}
-  var isPageAnchor = /^(referenz|reference)-\d+$/.test(hash) || hash === "inhalt";
+  var isPageAnchor = /^(referenz|reference|arbeit|work)-\d+$/.test(hash) || hash === "inhalt";
   if (hash && !isPageAnchor) {
     try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
     busy(true);
@@ -330,6 +423,7 @@
 
   // 2) Schon einmal geöffnet (auch in der anderen Sprache): nicht erneut fragen
   var s = saved();
+  route();
   if (s) {
     busy(true);
     unlock(s).then(function (payload) { busy(false); show(payload); })
