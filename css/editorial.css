@@ -215,11 +215,6 @@
 }
 
 /* ---------- Kopfzeile: Schalterleiste + Navigation ---------- */
-[data-view="editorial"] .topbar {
-  padding: 16px 0 8px;
-  flex-wrap: wrap;
-  row-gap: 8px;
-}
 [data-view="editorial"] .theme-toggle,
 [data-view="editorial"] .theme-switch {
   min-height: 0;
@@ -253,7 +248,7 @@
   text-underline-offset: 4px;
 }
 
-/* Navigation: im Editorial-Modus als Zeile unter der Schalterleiste (editorial.js verschiebt sie) */
+/* Navigation: im Editorial-Modus als Zeile unter der Schalterleiste (editorial.js verschiebt sie), linksbündig */
 [data-view="editorial"] .nav {
   position: static;
   transform: none;
@@ -265,14 +260,6 @@
   background: none;
   box-shadow: none;
   border-bottom: 1px solid var(--e-border-rule);
-}
-[data-view="editorial"] .nav__brand {
-  margin-right: auto;
-  font-size: var(--e-label-size);
-  line-height: var(--e-label-line);
-  font-weight: 500;
-  color: var(--e-text-primary);
-  white-space: nowrap;
 }
 [data-view="editorial"] .nav a {
   min-height: 24px;
@@ -290,11 +277,9 @@
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-[data-view="editorial"] .nav a:last-child { margin-right: -8px; }
-@media (max-width: 599px) {
-  [data-view="editorial"] .nav__brand { display: none; }
-  [data-view="editorial"] .nav { justify-content: flex-start; margin-left: -8px; }
-}
+/* Navigation linksbündig auf allen Breiten (seit 25.11.2026 ohne Namenszug) – Textkante der Links bündig mit der Seite */
+[data-view="editorial"] .nav { justify-content: flex-start; }
+[data-view="editorial"] .nav a:first-of-type { margin-left: -8px; }
 
 /* Projektindex (Referenz-Navigation) */
 [data-view="editorial"] .ref-nav {
@@ -549,22 +534,40 @@
 .e-takeaway .e-body { max-width: var(--e-measure); }
 .e-takeaway__note { padding-top: 24px; border-top: 1px solid var(--e-border-rule); }
 
-/* Blättern */
-.e-pager { display: grid; gap: 8px; padding-top: var(--e-block); padding-bottom: 24px; }
-@media (min-width: 900px) { .e-pager { grid-template-columns: 1fr 1fr; gap: var(--e-col-gap); } }
+/* Blättern (25.11.2026): schlicht wie die obere Navigation – Trennlinie oben, „Zurück“ links, „Weiter“ rechts */
+.e-pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: var(--e-block);
+  padding: 16px 0 24px;
+  border-top: 1px solid var(--e-border-rule);
+}
 .e-pager a {
-  display: grid;
-  gap: 12px;
-  align-content: start;
-  padding: 16px;
-  margin: 0 -16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px; /* WCAG 2.5.8 */
+  padding: 4px 8px;
+  font-family: var(--e-sans);
+  font-size: var(--e-nav-size);
+  line-height: var(--e-nav-line);
   color: var(--e-text-primary);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
-.e-pager__title { font-family: var(--e-serif); font-size: var(--e-pager-size); line-height: var(--e-pager-line); }
-@media (hover: hover) {
-  .e-pager a:hover .e-pager__title { color: var(--e-text-accent-large); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.e-pager a[rel="prev"] { margin-left: -8px; }
+.e-pager a[rel="next"] { margin-right: -8px; }
+.e-pager__label {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: background-size 0.25s var(--e-ease);
 }
+.e-pager a:hover { color: var(--e-text-accent); }
+.e-pager a:hover .e-pager__label { background-size: 100% 1px; }
 
 /* Buttons und Links */
 .e-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
@@ -716,8 +719,8 @@
 
 /* Blättern: Pfeil rückt in seine Richtung */
 .e-arrow { display: inline-block; transition: transform 0.25s var(--e-ease); }
+.e-arrow .arrow { margin: 0; } /* Lucide-Pfeil im Blättern: Abstand kommt vom Leerzeichen */
 @media (hover: hover) {
-  .e-pager a:hover .e-pager__title { text-decoration: none; }
   .e-pager a[rel="prev"]:hover .e-arrow { transform: translateX(-4px); }
   .e-pager a[rel="next"]:hover .e-arrow { transform: translateX(4px); }
 }
@@ -739,33 +742,18 @@
    Release 24.11.2026
    ========================================================================== */
 
-/* Schalterleiste: Sprache links, Darstellung + Hell/Dunkel rechts (ohne Beschriftung) */
-[data-view="editorial"] .theme-switch a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 24px;
-  padding: 4px 8px;
-  color: var(--e-text-secondary);
-  text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-repeat: no-repeat;
-  background-origin: content-box;
-  background-clip: content-box;
-  background-position: 0 100%;
-  background-size: 0 1px;
-  transition: background-size 0.25s var(--e-ease), color 0.2s ease;
-}
-[data-view="editorial"] .theme-switch a:hover { color: var(--e-text-primary); background-size: 100% 1px; }
-[data-view="editorial"] .theme-switch a[aria-current] { color: var(--e-text-accent); font-weight: 500; background-size: 100% 1px; }
-[data-view="editorial"] .lang-switch { margin-left: -8px; }
-[data-view="editorial"] .topbar__end { gap: 12px; margin-right: -4px; }
-[data-view="editorial"] .mode-toggle {
-  width: 32px; height: 32px; min-height: 0;
+/* Schalterleiste (Release 25.11.2026): gleiche Höhe und Trefferflächen wie Bento (site.css),
+   nur die Anmutung ist editorial – eckig, ohne Ring, Hover in Akzentfarbe */
+[data-view="editorial"] .bar-btn {
   border-radius: 0;
+  font-family: var(--e-sans);
+  font-size: var(--e-meta-size);
+  font-weight: 500;
   color: var(--e-text-primary);
+  transition: color 0.2s ease;
 }
-[data-view="editorial"] .mode-toggle:hover { box-shadow: none; color: var(--e-text-accent); }
-[data-view="editorial"] .mode-toggle svg { width: 16px; height: 16px; }
+[data-view="editorial"] .bar-btn:hover { box-shadow: none; color: var(--e-text-accent); }
+[data-view="editorial"] .bar-btn svg { width: 16px; height: 16px; }
 
 /* Logos bleiben im Dunkeln auf heller Papierfläche (dunkle Original-Logos) */
 @media (prefers-color-scheme: dark) {
@@ -813,7 +801,5 @@
 
 /* Ergebnis ohne Zusatztext: Satz über die volle Breite */
 @media (min-width: 900px) { .e-step__row--wide { grid-template-columns: 1fr; } }
-.e-pager > span:empty { display: none; }
-@media (min-width: 900px) { .e-pager > span:empty { display: block; } }
 /* Browser-Standardabstand bei h3 entfernen (Titel und Text stehen oben bündig, wie in Figma) */
 .e-main h3, .e-main dl { margin: 0; }

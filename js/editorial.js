@@ -107,19 +107,11 @@
   var nav = document.querySelector(".nav");
   var topbar = document.querySelector(".topbar");
   var navHome = nav ? { parent: nav.parentNode, next: nav.nextSibling } : null;
-  var brand = null;
   function placeNav() {
     if (!nav || !topbar) return;
     if (isEditorial()) {
-      if (!brand) {
-        brand = document.createElement("span");
-        brand.className = "nav__brand";
-        brand.textContent = "Marc Schappach";
-      }
-      if (brand.parentNode !== nav) nav.insertBefore(brand, nav.firstChild);
       if (nav.previousElementSibling !== topbar) topbar.insertAdjacentElement("afterend", nav);
     } else {
-      if (brand && brand.parentNode) brand.parentNode.removeChild(brand);
       if (nav.parentNode !== navHome.parent) navHome.parent.insertBefore(nav, navHome.next);
     }
   }

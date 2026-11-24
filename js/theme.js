@@ -1,8 +1,9 @@
-/* Schalterleiste rechts: Darstellung (Bento · Editorial) und Hell/Dunkel.
+/* Symbole: ausschließlich Lucide (lucide.dev, ISC-Lizenz, v1.79.0) – sun, moon, layout-dashboard (Bento), newspaper (Editorial).
+   Schalterleiste rechts: zwei Symbol-Knöpfe, Darstellung (Bento ↔ Editorial) und Hell/Dunkel.
+   Beide zeigen den aktuellen Zustand als Symbol, ein Klick wechselt; Ziel steht im aria-label/title.
    Zwei unabhängige Einstellungen, beide im Browser gemerkt:
    – Darstellung: <html data-view="editorial"> (Standard) oder ohne Attribut = Bento   (localStorage „view“)
    – Modus:       <html data-theme="light|dark"> oder ohne Attribut = Systemeinstellung (localStorage „mode“)
-   Der Hell/Dunkel-Knopf zeigt den aktuellen Modus (Sonne = hell, Mond = dunkel); ein Klick wechselt.
    Ersetzt den Platzhalter #theme-toggle. Bei jedem Wechsel feuert das Dokument „themechange“
    (detail.view, detail.mode) – editorial.js und gate.js tauschen darauf den Inhalt. */
 (function () {
@@ -11,12 +12,16 @@
   if (!slot) return;
   var en = (root.lang || "de").slice(0, 2) === "en";
   var T = en ? {
-    view: "Display", toDark: "Switch to dark mode", toLight: "Switch to light mode"
+    toDark: "Switch to dark mode", toLight: "Switch to light mode",
+    toBento: "Display: Editorial – switch to Bento", toEditorial: "Display: Bento – switch to Editorial"
   } : {
-    view: "Darstellung", toDark: "Zu dunkler Darstellung wechseln", toLight: "Zu heller Darstellung wechseln"
+    toDark: "Zu dunkler Darstellung wechseln", toLight: "Zu heller Darstellung wechseln",
+    toBento: "Darstellung: Editorial – zu Bento wechseln", toEditorial: "Darstellung: Bento – zu Editorial wechseln"
   };
-  var SUN = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
-  var MOON = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false"><path d="M13.5 9.6A5.75 5.75 0 1 1 6.4 2.5a5.7 5.7 0 0 0 7.1 7.1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+  var SUN = '<svg class="lucide lucide-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+  var MOON = '<svg class="lucide lucide-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>';
+  var BENTO = '<svg class="lucide lucide-layout-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>';
+  var EDITORIAL = '<svg class="lucide lucide-newspaper" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18h-5"/><path d="M18 14h-8"/><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="10" y="6" rx="1"/></svg>';
   var dark = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
 
   function view() { return root.getAttribute("data-view") === "editorial" ? "editorial" : "bento"; }
@@ -28,34 +33,28 @@
 
   var end = document.createElement("div");
   end.className = "topbar__end";
-  var group = document.createElement("div");
-  group.className = "theme-switch";
-  group.id = "theme-toggle";
-  group.setAttribute("role", "group");
-  group.setAttribute("aria-label", T.view);
-  var buttons = {};
-  [["bento", "Bento"], ["editorial", "Editorial"]].forEach(function (o) {
-    var b = document.createElement("button");
-    b.type = "button";
-    b.textContent = o[1];
-    b.addEventListener("click", function () { change(function () { setView(o[0]); }, o[0] !== view()); });
-    buttons[o[0]] = b;
-    group.appendChild(b);
+  var viewBtn = document.createElement("button");
+  viewBtn.type = "button";
+  viewBtn.className = "bar-btn bar-btn--view";
+  viewBtn.id = "theme-toggle";
+  viewBtn.addEventListener("click", function () {
+    change(function () { setView(view() === "editorial" ? "bento" : "editorial"); }, true);
   });
   var toggle = document.createElement("button");
   toggle.type = "button";
-  toggle.className = "mode-toggle";
+  toggle.className = "bar-btn bar-btn--mode";
   toggle.addEventListener("click", function () {
     change(function () { setMode(mode() === "dark" ? "light" : "dark"); }, true);
   });
-  end.appendChild(group);
+  end.appendChild(viewBtn);
   end.appendChild(toggle);
   slot.replaceWith(end);
 
   function render() {
     var v = view(), m = mode();
-    buttons.bento.setAttribute("aria-pressed", v === "bento" ? "true" : "false");
-    buttons.editorial.setAttribute("aria-pressed", v === "editorial" ? "true" : "false");
+    viewBtn.innerHTML = v === "editorial" ? EDITORIAL : BENTO;
+    viewBtn.setAttribute("aria-label", v === "editorial" ? T.toBento : T.toEditorial);
+    viewBtn.setAttribute("title", v === "editorial" ? T.toBento : T.toEditorial);
     toggle.innerHTML = m === "dark" ? MOON : SUN;
     toggle.setAttribute("aria-label", m === "dark" ? T.toLight : T.toDark);
     toggle.setAttribute("title", m === "dark" ? T.toLight : T.toDark);
