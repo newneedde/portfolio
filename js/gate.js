@@ -268,7 +268,15 @@
   var gateTitle = document.title;
   var lastView = null;
 
+  // Animierte Bilder (z. B. AVIF-Loops in Referenz 07): bei „Bewegung reduzieren“ das Standbild aus data-still zeigen
+  function stillImages(scope) {
+    if (!reduceMotion) return;
+    Array.prototype.forEach.call(scope.querySelectorAll("img[data-still]"), function (img) {
+      img.src = img.getAttribute("data-still");
+    });
+  }
   function place(next, keepPosition, title, editorial) {
+    stillImages(next);
     var docEl = document.documentElement;
     var ratio = keepPosition ? window.scrollY / Math.max(1, docEl.scrollHeight - window.innerHeight) : 0;
     var current = document.getElementById("inhalt");
@@ -322,7 +330,7 @@
         var src = imgs[parseInt(img.getAttribute("data-ref"), 10)];
         if (!src) return;
         img.src = src.getAttribute("src");
-        ["width", "height", "alt"].forEach(function (a) {
+        ["width", "height", "alt", "data-still"].forEach(function (a) {
           if (!img.hasAttribute(a) && src.hasAttribute(a)) img.setAttribute(a, src.getAttribute(a));
         });
       });
