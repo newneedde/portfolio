@@ -82,44 +82,76 @@
     });
   }
 
-  /* Scroll-Bühne: Sektion rastet ein, der Screenshot im Laptop scrollt bis zum Ende weiter.
-     Ruhezonen am Anfang und Ende (je 6 %), damit Start- und Endbild kurz stehen bleiben. */
-  var scStages = [], scTicking = false;
-  function scMeasure(el) {
-    var screen = el.querySelector(".e-laptop__screen"), shot = el.querySelector(".e-scrolly__shot");
-    if (!screen || !shot) return;
-    var over = Math.max(0, shot.offsetHeight - screen.clientHeight);
-    el._over = over;
-    el.style.setProperty("--travel", Math.round(Math.max(over * 0.9, 600)) + "px");
+  /* Scroll-Bühne (Arbeit 02): Die Sektion scrollt ganz normal mit. Sobald der Laptop
+     gut sichtbar ist, läuft der Screenshot von selbst langsam nach unten und zeigt so den
+     Umfang der Seite. Verlässt er den Blick, pausiert er; ist er fertig und kommt man
+     später zurück, läuft er wieder nach oben. Mit der Maus darüber hält er an. */
+  var scAll = [], scResizeT = 0;
+  function scMake(st) {
+    var over = Math.max(0, st.shot.offsetHeight - st.screen.clientHeight);
+    var old = st.anim, frac = 0, rate = 1, playing = false;
+    if (old) {
+      frac = (old.currentTime || 0) / st.dur; rate = old.playbackRate;
+      playing = old.playState === "running"; old.cancel();
+    }
+    st.anim = null;
+    if (over < 8) return;
+    st.dur = Math.min(24000, Math.max(8000, over / st.screen.clientHeight * 3200));
+    st.anim = st.shot.animate(
+      [{ transform: "translate3d(0,0,0)" }, { transform: "translate3d(0," + (-over) + "px,0)" }],
+      { duration: st.dur, easing: "cubic-bezier(.45,0,.55,1)", fill: "both" });
+    st.anim.pause();
+    st.anim.currentTime = Math.min(1, Math.max(0, frac)) * st.dur;
+    st.anim.playbackRate = rate;
+    if (playing) st.anim.play();
   }
-  function scUpdate() {
-    scTicking = false;
-    var vh = window.innerHeight;
-    scStages = scStages.filter(function (el) { return el.isConnected; });
-    scStages.forEach(function (el) {
-      var r = el.getBoundingClientRect(), total = el.offsetHeight - vh;
-      if (r.bottom < -vh || r.top > 2 * vh || total <= 0) return;
-      var p = Math.min(1, Math.max(0, -r.top / total));
-      var q = Math.min(1, Math.max(0, (p - 0.06) / 0.88));
-      var shot = el.querySelector(".e-scrolly__shot");
-      if (shot) shot.style.transform = "translate3d(0," + (-q * (el._over || 0)).toFixed(1) + "px,0)";
-    });
+  function scStart(st) {
+    var a = st.anim;
+    if (!a || a.playState === "running") return;
+    if (a.playState === "finished") { if (st.left) a.reverse(); }
+    else a.play();
+    st.left = false;
   }
-  function scRequest() { if (!scTicking) { scTicking = true; requestAnimationFrame(scUpdate); } }
   function scrolly(scope) {
-    if (reduce || !("requestAnimationFrame" in window)) return;
+    if (reduce || !("IntersectionObserver" in window) || !Element.prototype.animate) return;
     Array.prototype.forEach.call((scope || document).querySelectorAll(".e-scrolly"), function (el) {
       if (el.classList.contains("is-active")) return;
+      var screen = el.querySelector(".e-laptop__screen"), shot = el.querySelector(".e-scrolly__shot");
+      if (!screen || !shot) return;
       el.classList.add("is-active");
-      scStages.push(el);
-      var shot = el.querySelector(".e-scrolly__shot");
-      if (shot) shot.addEventListener("load", function () { scMeasure(el); scRequest(); });
-      scMeasure(el);
+      var st = { el: el, screen: screen, shot: shot, anim: null, dur: 1, left: false, timer: 0, hover: false };
+      scAll.push(st);
+      shot.addEventListener("load", function () { scMake(st); });
+      if (shot.complete && shot.naturalHeight) scMake(st);
+      new IntersectionObserver(function (entries) {
+        var r = entries[0].intersectionRatio;
+        if (r >= 0.55) {
+          if (!st.timer && !st.hover) st.timer = setTimeout(function () { st.timer = 0; scStart(st); }, 500);
+        } else if (r < 0.2) {
+          clearTimeout(st.timer); st.timer = 0;
+          if (st.anim && st.anim.playState === "running") st.anim.pause();
+          if (r === 0) st.left = true;
+        }
+      }, { threshold: [0, 0.2, 0.55] }).observe(screen);
+      screen.addEventListener("pointerenter", function (e) {
+        if (e.pointerType !== "mouse") return;
+        st.hover = true;
+        if (st.anim && st.anim.playState === "running") { st.anim.pause(); st.hoverPaused = true; }
+      });
+      screen.addEventListener("pointerleave", function (e) {
+        if (e.pointerType !== "mouse") return;
+        st.hover = false;
+        if (st.hoverPaused) { st.hoverPaused = false; st.anim && st.anim.play(); }
+      });
     });
-    scRequest();
   }
-  window.addEventListener("scroll", scRequest, { passive: true });
-  window.addEventListener("resize", function () { scStages.forEach(scMeasure); scRequest(); });
+  window.addEventListener("resize", function () {
+    clearTimeout(scResizeT);
+    scResizeT = setTimeout(function () {
+      scAll = scAll.filter(function (st) { return st.el.isConnected; });
+      scAll.forEach(scMake);
+    }, 200);
+  });
 
   function enhance(scope) {
     reveal(scope || document);
