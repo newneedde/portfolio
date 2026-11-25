@@ -824,3 +824,12 @@
   :root:not([data-theme="light"]) .e-hero__video--light { display: none; }
   :root:not([data-theme="light"]) .e-hero__video--dark { display: block; }
 }
+
+/* Bankenlogos: optisch ausgeglichen (Breite je Logo als --lw, gesetzt in quelle-privat/logos_ausgleichen.py),
+   jedes Logo mittig in gleich hoher Zelle (Schutzraum). Mobil alle gleich verkleinert. */
+.e-logos li { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 56px; }
+.e-stage .e-logos img { width: calc(var(--lw, 120) * 0.82px); max-width: 100%; height: auto; }
+@media (min-width: 900px) {
+  .e-logos li { min-height: 80px; }
+  .e-stage .e-logos img { width: calc(var(--lw, 120) * 1.15px); }
+}

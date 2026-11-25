@@ -624,3 +624,11 @@ h1[tabindex="-1"]:focus { outline: none; }
 .la-steps__title { font-weight: 600; }
 .la-steps__desc { color: var(--color-text-secondary); }
 @media (min-width: 700px) { .la-steps { grid-template-columns: 1fr 1fr; gap: 24px 32px; } }
+
+/* Bankenlogos: optisch ausgeglichen (Breite je Logo als --lw), gleich hohe Zellen als Schutzraum */
+.logo-wall li { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 56px; }
+.logo-wall img { width: calc(var(--lw, 120) * 0.82px); }
+@media (min-width: 900px) {
+  .logo-wall li { min-height: 80px; }
+  .logo-wall img { width: calc(var(--lw, 120) * 1.15px); }
+}
