@@ -808,7 +808,7 @@
    Hintergrund im Video = Seitenfarbe, die Phones ragen oben über die lila Karte.
    Video 1080 × 942, Karte bei x 28–1050: Video etwas breiter als die Spalte,
    damit die Karte bündig mit den übrigen Abbildungen sitzt (Rand ist reine Hintergrundfarbe). */
-.e-hero { overflow: hidden; }
+.e-hero { display: block; overflow: hidden; } /* kein Grid: sonst schrumpft das Video */
 .e-hero__video {
   display: block;
   width: 105.57%;

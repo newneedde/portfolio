@@ -608,3 +608,19 @@ h1[tabindex="-1"]:focus { outline: none; }
 .bar-btn svg { flex: none; width: 18px; height: 18px; }
 /* Platzhalter bis theme.js die beiden Knöpfe einsetzt: Breite reservieren, Text nicht zeigen */
 .theme-toggle#theme-toggle { visibility: hidden; width: 92px; min-height: 44px; padding: 0; }
+
+/* ---------- Referenz 04: Live Activity als Video (Handy-Kachel) und Ablauf als Text ---------- */
+.phone__video {
+  display: block;
+  aspect-ratio: 786 / 1704;
+  border-radius: 36px;
+  background: #0b1226;
+  object-fit: cover;
+}
+.la-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.la-steps li { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: 12px; align-items: baseline; }
+.la-steps__num { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--color-text-secondary); }
+.la-steps__text { display: grid; gap: 4px; }
+.la-steps__title { font-weight: 600; }
+.la-steps__desc { color: var(--color-text-secondary); }
+@media (min-width: 700px) { .la-steps { grid-template-columns: 1fr 1fr; gap: 24px 32px; } }
