@@ -191,7 +191,10 @@
     videoObservers = [];
     var videos = scope.querySelectorAll("video[data-media], video[data-src]");
     if (!videos.length) return;
-    function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    function play(v) {
+      if (v.ended && !v.loop) return; // Einmal-Videos (aiba-Hero) bleiben auf dem Endbild
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+    }
     function load(v) {
       if (v.getAttribute("data-loaded")) return;
       v.setAttribute("data-loaded", "1");
@@ -205,6 +208,8 @@
     Array.prototype.forEach.call(videos, function (v) {
       v.muted = true; // Voraussetzung für Autoplay in allen Browsern
       if (reduceMotion) v.setAttribute("controls", "");
+      // Poster = erstes Bild (kein Sprung beim Start); bei „Bewegung reduzieren“ stattdessen das Endbild
+      if (reduceMotion && v.getAttribute("data-still")) v.setAttribute("poster", v.getAttribute("data-still"));
     });
     if (!("IntersectionObserver" in window)) {
       Array.prototype.forEach.call(videos, function (v) { v.setAttribute("data-visible", "1"); load(v); });
