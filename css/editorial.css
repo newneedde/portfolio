@@ -910,3 +910,9 @@
   .e-step--split .e-step__row { grid-template-columns: 1fr; }
   .e-step--split-rev > .e-fig { order: -1; }
 }
+
+/* Einheitliche Rundung der Screens (gegen helle/dunkle Ecken im Dunkelmodus).
+   Bühnenflächen bleiben eckig. Handy-Screens und Handy-Videos haben dieselbe Rundung (≈ iPhone). */
+.e-shot { border-radius: 8px; }
+.e-shot--phone, .e-video--phone { border-radius: 13% / 6%; }
+@media (min-width: 900px) { .e-shot { border-radius: 12px; } }
