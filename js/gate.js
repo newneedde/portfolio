@@ -347,9 +347,6 @@
         ["width", "height", "alt", "data-still"].forEach(function (a) {
           if (!img.hasAttribute(a) && src.hasAttribute(a)) img.setAttribute(a, src.getAttribute(a));
         });
-        // Einheitliche Rundung: Handy-Screens (hochkant) und übrige Screens, Logos ausgenommen
-        var iw = +img.getAttribute("width"), ih = +img.getAttribute("height");
-        if (iw && ih && !img.closest(".e-logos")) img.classList.add(ih / iw > 1.6 ? "e-shot--phone" : "e-shot");
       });
       title = w.title;
     }
