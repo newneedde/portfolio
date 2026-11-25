@@ -82,8 +82,48 @@
     });
   }
 
+  /* Scroll-Bühne: Sektion rastet ein, der Screenshot im Laptop scrollt bis zum Ende weiter.
+     Ruhezonen am Anfang und Ende (je 6 %), damit Start- und Endbild kurz stehen bleiben. */
+  var scStages = [], scTicking = false;
+  function scMeasure(el) {
+    var screen = el.querySelector(".e-laptop__screen"), shot = el.querySelector(".e-scrolly__shot");
+    if (!screen || !shot) return;
+    var over = Math.max(0, shot.offsetHeight - screen.clientHeight);
+    el._over = over;
+    el.style.setProperty("--travel", Math.round(Math.max(over * 0.9, 600)) + "px");
+  }
+  function scUpdate() {
+    scTicking = false;
+    var vh = window.innerHeight;
+    scStages = scStages.filter(function (el) { return el.isConnected; });
+    scStages.forEach(function (el) {
+      var r = el.getBoundingClientRect(), total = el.offsetHeight - vh;
+      if (r.bottom < -vh || r.top > 2 * vh || total <= 0) return;
+      var p = Math.min(1, Math.max(0, -r.top / total));
+      var q = Math.min(1, Math.max(0, (p - 0.06) / 0.88));
+      var shot = el.querySelector(".e-scrolly__shot");
+      if (shot) shot.style.transform = "translate3d(0," + (-q * (el._over || 0)).toFixed(1) + "px,0)";
+    });
+  }
+  function scRequest() { if (!scTicking) { scTicking = true; requestAnimationFrame(scUpdate); } }
+  function scrolly(scope) {
+    if (reduce || !("requestAnimationFrame" in window)) return;
+    Array.prototype.forEach.call((scope || document).querySelectorAll(".e-scrolly"), function (el) {
+      if (el.classList.contains("is-active")) return;
+      el.classList.add("is-active");
+      scStages.push(el);
+      var shot = el.querySelector(".e-scrolly__shot");
+      if (shot) shot.addEventListener("load", function () { scMeasure(el); scRequest(); });
+      scMeasure(el);
+    });
+    scRequest();
+  }
+  window.addEventListener("scroll", scRequest, { passive: true });
+  window.addEventListener("resize", function () { scStages.forEach(scMeasure); scRequest(); });
+
   function enhance(scope) {
     reveal(scope || document);
+    scrolly(scope || document);
     var els = (scope || document).querySelectorAll("[data-count]:not([data-final])");
     if (!els.length) return;
     var canAnimate = !reduce && "IntersectionObserver" in window && "requestAnimationFrame" in window;

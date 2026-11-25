@@ -833,3 +833,80 @@
   .e-logos li { min-height: 80px; }
   .e-stage .e-logos img { width: calc(var(--lw, 120) * 1.15px); }
 }
+
+/* ---------- Scroll-Bühne (Arbeit 02 · Design System) ----------
+   Die Sektion rastet ein (sticky), der Text bleibt stehen, der Screenshot im Laptop
+   scrollt mit der Seite weiter bis zum Ende – dann geht es zur nächsten Sektion.
+   Steuerung in editorial.js (Editorial.scrolly). Ohne JS oder bei „Bewegung reduzieren“:
+   normale Sektion, der Bildschirm lässt sich selbst scrollen. */
+.e-scrolly { position: relative; }
+.e-scrolly.is-active { height: calc(100svh + var(--travel, 1600px)); }
+.e-scrolly__pin {
+  display: grid;
+  gap: 20px;
+  align-content: center;
+  padding: var(--e-block) 0;
+}
+.e-scrolly.is-active .e-scrolly__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  padding: 24px 0;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.e-scrolly__text { display: grid; gap: 12px; align-content: center; max-width: var(--e-measure); }
+.e-scrolly__media { min-height: 0; display: grid; align-items: center; justify-items: center; }
+
+/* Laptop-Rahmen (reines CSS) */
+.e-laptop { width: 100%; max-width: 820px; }
+.e-scrolly.is-active .e-laptop { max-height: 100%; width: min(100%, calc((100svh - 230px) * 1.55)); }
+.e-laptop__screen {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #ffffff;
+  border: 10px solid #16171b;
+  border-radius: 18px 18px 6px 6px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), 0 24px 60px rgba(20, 22, 18, 0.18);
+}
+.e-laptop__screen::before { /* Kamera */
+  content: ""; position: absolute; z-index: 1; top: -7px; left: 50%; width: 4px; height: 4px; margin-left: -2px;
+  border-radius: 50%; background: #3a3c44;
+}
+.e-scrolly:not(.is-active) .e-laptop__screen { overflow-y: auto; overscroll-behavior: contain; }
+.e-laptop__base {
+  position: relative;
+  height: 12px;
+  margin: 0 -8%;
+  border-radius: 2px 2px 14px 14px;
+  background: linear-gradient(180deg, #e4e4e8 0%, #c4c4ca 55%, #9d9da4 100%);
+  box-shadow: 0 10px 24px rgba(20, 22, 18, 0.16);
+}
+.e-laptop__base::before { /* Griffmulde */
+  content: ""; position: absolute; top: 0; left: 50%; width: 16%; height: 5px; margin-left: -8%;
+  border-radius: 0 0 8px 8px; background: rgba(0, 0, 0, 0.14);
+}
+.e-scrolly__shot { display: block; width: 100%; height: auto; will-change: transform; }
+
+@media (min-width: 900px) {
+  .e-scrolly__pin { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: var(--e-col-gap); align-items: center; }
+  .e-scrolly.is-active .e-scrolly__pin { grid-template-rows: none; padding: 48px 0; }
+  .e-scrolly--text-left .e-scrolly__pin { grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); }
+  .e-scrolly--text-left .e-scrolly__text { order: -1; }
+  .e-scrolly--text-right .e-scrolly__text { order: 1; }
+  .e-scrolly.is-active .e-laptop { width: min(100%, calc((100svh - 140px) * 1.55)); }
+}
+/* Mobil: Text oben, Laptop darunter */
+@media (max-width: 899px) {
+  .e-scrolly__text { order: -1; }
+  .e-scrolly__text .e-body { font-size: 15px; }
+}
+
+/* Arbeit 02 (Variante A): Screens abgerundet, Schritt-Bilder halb breit neben dem Text, versetzt */
+.e-fig--screen > img { border-radius: 8px; }
+@media (min-width: 900px) {
+  .e-fig--screen > img { border-radius: 12px; }
+  .e-step--split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--e-col-gap); align-items: center; }
+  .e-step--split .e-step__row { grid-template-columns: 1fr; }
+  .e-step--split-rev > .e-fig { order: -1; }
+}

@@ -171,7 +171,7 @@
   /* ---------- Videos ---------- */
   var reduceMotion = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   var mediaUrls = {};
-  function mediaUrl(name) {
+  function mediaUrl(name, type) {
     if (!mediaUrls[name]) {
       mediaUrls[name] = fetch(MEDIA + name + ".bin", { cache: "no-cache" }).then(function (r) {
         if (!r.ok) throw new Error("load");
@@ -180,10 +180,18 @@
         var key = await deriveKey(unlocked.secret, unlocked.box);
         var bytes = new Uint8Array(buf);
         var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: bytes.slice(0, 12) }, key, bytes.slice(12));
-        return URL.createObjectURL(new Blob([plain], { type: "video/mp4" }));
+        return URL.createObjectURL(new Blob([plain], { type: type || "video/mp4" }));
       }).catch(function (e) { delete mediaUrls[name]; throw e; });
     }
     return mediaUrls[name];
+  }
+  // Verschlüsselte Bilder (Scroll-Bühnen Arbeit 02): <img data-media="media-08"> – erst entschlüsseln, dann anzeigen
+  function setupImages(scope) {
+    if (!unlocked) return;
+    Array.prototype.forEach.call(scope.querySelectorAll("img[data-media]"), function (img) {
+      if (img.getAttribute("src")) return;
+      mediaUrl(img.getAttribute("data-media"), "image/webp").then(function (url) { img.src = url; }).catch(function () {});
+    });
   }
   var videoObservers = [];
   function setupVideos(scope) {
@@ -306,6 +314,7 @@
     }
     if (editorial && window.Editorial) window.Editorial.enhance(next);
     setupVideos(next);
+    setupImages(next);
   }
 
   function showGate(active, keepPosition) {
